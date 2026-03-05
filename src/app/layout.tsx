@@ -7,17 +7,28 @@ import { getSiteUrlObject } from '@/lib/site';
 
 export const metadata: Metadata = {
   metadataBase: getSiteUrlObject(),
-  title: 'Go for Java Developers',
+  title: {
+    default: 'Java to Go Guide for Developers',
+    template: '%s | Java to Go Guide',
+  },
   description:
-    'A comprehensive guide to Go for Java developers — covering types, concurrency, error handling, generics, and more.',
-  keywords: ['Go', 'Golang', 'Java', 'guide', 'tutorial', 'concurrency', 'goroutines'],
+    'Learn Go for Java developers with side-by-side examples, concurrency patterns, error handling, and practical Go architecture guidance.',
+  keywords: [
+    'java to go guide',
+    'learn go for java developers',
+    'go for java devs',
+    'java vs go',
+    'golang tutorial for java developers',
+    'goroutines vs threads',
+    'go error handling',
+  ],
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: 'Go for Java Developers',
+    title: 'Java to Go Guide for Developers',
     description:
-      'A comprehensive guide to Go for Java developers — covering types, concurrency, error handling, generics, and more.',
+      'Learn Go for Java developers with side-by-side examples, concurrency patterns, error handling, and practical Go architecture guidance.',
     type: 'website',
     url: '/',
     images: [
@@ -31,9 +42,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Go for Java Developers',
+    title: 'Java to Go Guide for Developers',
     description:
-      'A comprehensive guide to Go for Java developers — covering types, concurrency, error handling, generics, and more.',
+      'Learn Go for Java developers with side-by-side examples, concurrency patterns, error handling, and practical Go architecture guidance.',
     images: ['/assets/go-for-java-developers-banner.png'],
   },
 };

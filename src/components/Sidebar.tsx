@@ -65,6 +65,40 @@ export default function Sidebar({ sections, onClose, collapsed = false }: Sideba
           collapsed ? 'flex-1 overflow-y-auto px-1 py-2' : 'flex-1 overflow-y-auto px-2 py-2'
         }
       >
+        <Link
+          href="/"
+          onClick={onClose}
+          className={
+            collapsed
+              ? 'mb-1 flex items-center justify-center rounded-md py-2 transition-colors'
+              : 'mb-2 flex items-center gap-2.5 rounded-md px-3 py-2 transition-colors'
+          }
+          style={{
+            background: pathname === '/' ? 'var(--bg-elevated)' : 'transparent',
+            color: pathname === '/' ? 'var(--text-primary)' : 'var(--text-secondary)',
+            textDecoration: 'none',
+            fontSize: 13,
+          }}
+        >
+          <span
+            className="shrink-0 font-mono"
+            style={{
+              color: pathname === '/' ? 'var(--accent-cyan)' : 'var(--text-muted)',
+              fontSize: collapsed ? 11 : 10,
+              minWidth: collapsed ? 24 : 20,
+              textAlign: 'center',
+            }}
+          >
+            ◎
+          </span>
+          {!collapsed && <span>Guide Home</span>}
+          {!collapsed && pathname === '/' && (
+            <span className="ml-auto" style={{ color: 'var(--accent-cyan)', fontSize: 8 }}>
+              ●
+            </span>
+          )}
+        </Link>
+
         {sections.map((s) => {
           const href = `/sections/${s.id}`;
           const active = pathname === href || pathname === `${href}/`;

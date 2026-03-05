@@ -4,32 +4,92 @@ import sections, { getSectionById, getSectionNav } from '@/data/sections';
 import { renderBlocks } from '@/components/SectionRenderer';
 import SectionRenderer from '@/components/SectionRenderer';
 import Link from 'next/link';
+import { getSiteUrl } from '@/lib/site';
 
 export function generateStaticParams() {
   return sections.map((s) => ({ id: s.id }));
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const section = getSectionById(params.id);
+interface SectionPageProps {
+  params: Promise<{ id: string }>;
+}
+
+export async function generateMetadata({ params }: SectionPageProps): Promise<Metadata> {
+  const { id } = await params;
+  const section = getSectionById(id);
   if (!section) return {};
   return {
-    title: `${section.label} — Go for Java Developers`,
-    description: `Section ${section.title}: ${section.label}. Learn Go concepts from a Java developer's perspective.`,
+    title: `${section.label}`,
+    description: `Section ${section.title}: ${section.label}. Learn Go from a Java developer perspective with practical examples and idiomatic Go patterns.`,
     alternates: {
       canonical: `/sections/${section.id}`,
+    },
+    openGraph: {
+      title: `${section.label} | Java to Go Guide`,
+      description: `Section ${section.title}: ${section.label}. Learn Go from a Java developer perspective with practical examples and idiomatic Go patterns.`,
+      type: 'article',
+      url: `/sections/${section.id}`,
     },
   };
 }
 
-export default async function SectionPage({ params }: { params: { id: string } }) {
-  const section = getSectionById(params.id);
+export default async function SectionPage({ params }: SectionPageProps) {
+  const { id } = await params;
+  const section = getSectionById(id);
   if (!section) notFound();
 
-  const { prev, next } = getSectionNav(params.id);
+  const { prev, next } = getSectionNav(id);
   const renderedBlocks = await renderBlocks(section.blocks);
+  const siteUrl = getSiteUrl();
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Java to Go Guide',
+        item: `${siteUrl}/`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: section.label,
+        item: `${siteUrl}/sections/${section.id}`,
+      },
+    ],
+  };
+
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'TechArticle',
+    headline: `${section.label} - Java to Go Guide`,
+    description: `Section ${section.title}: ${section.label}. Learn Go from a Java developer perspective with practical examples and idiomatic Go patterns.`,
+    mainEntityOfPage: `${siteUrl}/sections/${section.id}`,
+    inLanguage: 'en',
+    isPartOf: {
+      '@type': 'CreativeWork',
+      name: 'Java to Go Guide',
+      url: `${siteUrl}/`,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Go for Java Developers',
+    },
+  };
 
   return (
     <article className="mx-auto w-full max-w-6xl px-6 py-8 lg:px-10 lg:py-10 xl:px-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+
       {/* Section header */}
       <header className="mb-8">
         <div
