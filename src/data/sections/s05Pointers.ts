@@ -7,7 +7,7 @@ const section: Section = {
   blocks: [
     {
       type: 'prose',
-      text: 'A pointer stores a memory address — the location of a value, not the value itself. Go makes this explicit. You choose, at every point, whether to work with the value or its address.',
+      text: 'A pointer stores a memory address — the location of a value, not the value itself. Go makes this explicit. You choose, at every point, whether to work with the value or its address. This is similar to C/C++.',
     },
     {
       type: 'note',
