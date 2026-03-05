@@ -18,6 +18,16 @@ The site is built with Next.js App Router and pre-renders all section pages at b
 - Syntax-highlighted examples
 - SEO metadata, sitemap, and robots routes
 
+## Tech Stack
+
+[![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19-149ECA?style=for-the-badge&logo=react&logoColor=white)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.3-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Shiki](https://img.shields.io/badge/Shiki-1.0-2D2D2D?style=for-the-badge)](https://shiki.style/)
+[![ESLint](https://img.shields.io/badge/ESLint-9-4B32C3?style=for-the-badge&logo=eslint&logoColor=white)](https://eslint.org/)
+[![Prettier](https://img.shields.io/badge/Prettier-3-1A2B34?style=for-the-badge&logo=prettier&logoColor=F7B93E)](https://prettier.io/)
+
 ## Run Locally
 
 ```bash
