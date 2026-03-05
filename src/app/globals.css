@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+
+:root {
+  /* Backgrounds */
+  --bg-base: #080812;
+  --bg-surface: #0d0d18;
+  --bg-elevated: #13131f;
+  --bg-java: #0e0e06;
+  --bg-java-header: #18180a;
+
+  /* Borders */
+  --border-dim: #16162a;
+  --border-subtle: #2a2a3a;
+  --border-java: #3a3a1a;
+
+  /* Text */
+  --text-primary: #e2e2f0;
+  --text-secondary: #8b8ba7;
+  --text-muted: #505070;
+  --text-dim: #3a3a5c;
+
+  /* Accent */
+  --accent-blue: #4a7aff;
+  --accent-cyan: #4ec9b0;
+  --accent-java: #c9b85a;
+
+  /* Syntax tokens */
+  --syn-keyword: #7c9fff;
+  --syn-type: #4ec9b0;
+  --syn-string: #ce9178;
+  --syn-number: #b5cea8;
+  --syn-comment: #4a4a6a;
+
+  /* Note box colors */
+  --note-info-bg: #0d1f2d;
+  --note-info-border: #1e4a6a;
+  --note-info-text: #7eb8d4;
+  --note-java-bg: #1a1a0d;
+  --note-java-border: #4a4a1e;
+  --note-java-text: #c9b85a;
+  --note-warn-bg: #1f0d0d;
+  --note-warn-border: #6a1e1e;
+  --note-warn-text: #d47e7e;
+  --note-tip-bg: #0d1f0d;
+  --note-tip-border: #1e4a1e;
+  --note-tip-text: #7ed47e;
+  --note-engine-bg: #1a0d1f;
+  --note-engine-border: #4a1e6a;
+  --note-engine-text: #c07ed4;
+  --note-why-bg: #0d1a1a;
+  --note-why-border: #1e4a4a;
+  --note-why-text: #7ed4c0;
+}
+
+html,
+body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+}
+
+/* Shiki code block overrides */
+.shiki {
+  margin: 0;
+  padding: 12px 16px;
+  overflow-x: auto;
+  font-size: 12px;
+  line-height: 1.8;
+  font-family: 'Fira Code', 'Cascadia Code', monospace;
+  background: transparent !important;
+}
+
+.shiki code {
+  background: transparent !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}

@@ -1,0 +1,134 @@
+{
+  "name": "go2java-dark",
+  "type": "dark",
+  "colors": {
+    "editor.background": "#0d0d18",
+    "editor.foreground": "#e2e2f0"
+  },
+  "tokenColors": [
+    {
+      "name": "Comments",
+      "scope": ["comment", "punctuation.definition.comment"],
+      "settings": { "foreground": "#4a4a6a", "fontStyle": "italic" }
+    },
+    {
+      "name": "Keywords",
+      "scope": [
+        "keyword",
+        "keyword.control",
+        "keyword.operator",
+        "keyword.other",
+        "storage.type",
+        "storage.modifier",
+        "keyword.control.go",
+        "keyword.function.go",
+        "keyword.var.go",
+        "keyword.const.go",
+        "keyword.type.go",
+        "keyword.import.go",
+        "keyword.package.go",
+        "keyword.interface.go",
+        "keyword.struct.go",
+        "keyword.map.go",
+        "keyword.chan.go",
+        "keyword.return.go",
+        "keyword.if.go",
+        "keyword.else.go",
+        "keyword.for.go",
+        "keyword.range.go",
+        "keyword.select.go",
+        "keyword.case.go",
+        "keyword.default.go",
+        "keyword.switch.go",
+        "keyword.go.go",
+        "keyword.defer.go",
+        "keyword.break.go",
+        "keyword.continue.go",
+        "keyword.goto.go",
+        "keyword.fallthrough.go",
+        "keyword.declaration.java",
+        "keyword.control.java",
+        "storage.type.java",
+        "storage.modifier.java"
+      ],
+      "settings": { "foreground": "#7c9fff" }
+    },
+    {
+      "name": "Types & Classes",
+      "scope": [
+        "entity.name.type",
+        "entity.name.class",
+        "entity.name.interface",
+        "entity.other.inherited-class",
+        "support.type",
+        "support.class",
+        "variable.language",
+        "entity.name.type.go",
+        "entity.name.package.go",
+        "support.type.java",
+        "entity.name.type.class.java",
+        "entity.name.type.interface.java",
+        "storage.type.primitive.java",
+        "storage.type.object.array.java"
+      ],
+      "settings": { "foreground": "#4ec9b0" }
+    },
+    {
+      "name": "Functions & Methods",
+      "scope": [
+        "entity.name.function",
+        "support.function",
+        "meta.function-call",
+        "entity.name.function.go",
+        "entity.name.function.java"
+      ],
+      "settings": { "foreground": "#dcdcaa" }
+    },
+    {
+      "name": "Strings",
+      "scope": [
+        "string",
+        "string.quoted",
+        "string.template",
+        "string.quoted.double",
+        "string.quoted.single",
+        "string.quoted.backtick"
+      ],
+      "settings": { "foreground": "#ce9178" }
+    },
+    {
+      "name": "Numbers",
+      "scope": ["constant.numeric", "constant.language", "constant.character"],
+      "settings": { "foreground": "#b5cea8" }
+    },
+    {
+      "name": "Boolean & nil/null",
+      "scope": [
+        "constant.language.boolean",
+        "constant.language.null",
+        "constant.language.nil"
+      ],
+      "settings": { "foreground": "#569cd6" }
+    },
+    {
+      "name": "Variables",
+      "scope": ["variable", "variable.other", "variable.parameter"],
+      "settings": { "foreground": "#e2e2f0" }
+    },
+    {
+      "name": "Operators",
+      "scope": ["keyword.operator", "punctuation.separator"],
+      "settings": { "foreground": "#d4d4d4" }
+    },
+    {
+      "name": "Annotations/Decorators",
+      "scope": ["meta.decorator", "punctuation.decorator"],
+      "settings": { "foreground": "#c07ed4" }
+    },
+    {
+      "name": "Package/Import names",
+      "scope": ["entity.name.namespace", "entity.name.module"],
+      "settings": { "foreground": "#4ec9b0" }
+    }
+  ]
+}

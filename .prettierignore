@@ -1,0 +1,6 @@
+node_modules
+.next
+out
+*.lock
+package-lock.json
+src/lib/shiki-theme.json
