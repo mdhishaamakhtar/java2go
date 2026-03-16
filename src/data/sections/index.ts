@@ -20,6 +20,7 @@ import s17 from './s17Blank';
 import s18 from './s18Lifecycle';
 import s19 from './s19Project';
 import s20 from './s20Outro';
+import s21 from './s21HttpConcurrency';
 
 const sections: Section[] = [
   s00,
@@ -42,6 +43,7 @@ const sections: Section[] = [
   s17,
   s18,
   s19,
+  s21,
   s20,
 ];
 

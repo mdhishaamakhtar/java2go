@@ -2,7 +2,7 @@ import type { Section } from '@/types/section';
 
 const section: Section = {
   id: 'outro',
-  title: '20',
+  title: '21',
   label: 'Go Mental Model — Recap',
   blocks: [
     {
