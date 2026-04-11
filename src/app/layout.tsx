@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
-import '@fontsource/merriweather/400.css';
-import '@fontsource/merriweather/700.css';
+import '@fontsource/barlow/400.css';
+import '@fontsource/barlow/600.css';
+import '@fontsource/barlow/700.css';
 import '@fontsource/fira-code/400.css';
 import '@fontsource/fira-code/500.css';
 import './globals.css';

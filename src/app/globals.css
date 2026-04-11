@@ -58,7 +58,7 @@ html,
 body {
   background-color: var(--bg-base);
   color: var(--text-primary);
-  font-family: 'Merriweather', Georgia, serif;
+  font-family: 'Barlow', 'Segoe UI', system-ui, sans-serif;
 }
 
 /* Shiki code block overrides */

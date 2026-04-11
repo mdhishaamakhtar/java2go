@@ -15,16 +15,11 @@ async function loadFont(path: string) {
 }
 
 export async function createSocialImage() {
-  const [merriweatherRegular, merriweatherBold, firaCodeRegular] =
-    await Promise.all([
-      loadFont(
-        'node_modules/@fontsource/merriweather/files/merriweather-latin-400-normal.woff',
-      ),
-      loadFont(
-        'node_modules/@fontsource/merriweather/files/merriweather-latin-700-normal.woff',
-      ),
-      loadFont('node_modules/@fontsource/fira-code/files/fira-code-latin-400-normal.woff'),
-    ]);
+  const [barlowRegular, barlowBold, firaCodeRegular] = await Promise.all([
+    loadFont('node_modules/@fontsource/barlow/files/barlow-latin-400-normal.woff'),
+    loadFont('node_modules/@fontsource/barlow/files/barlow-latin-700-normal.woff'),
+    loadFont('node_modules/@fontsource/fira-code/files/fira-code-latin-400-normal.woff'),
+  ]);
 
   return new ImageResponse(
     <div
@@ -123,24 +118,26 @@ export async function createSocialImage() {
           >
             <div
               style={{
-                fontFamily: 'Merriweather',
-                fontSize: 124,
-                lineHeight: 0.92,
+                fontFamily: 'Barlow',
+                fontSize: 136,
+                lineHeight: 0.88,
                 fontWeight: 700,
-                letterSpacing: '-0.05em',
+                letterSpacing: '-0.06em',
                 color: '#c9b85a',
+                textTransform: 'uppercase',
               }}
             >
               Java
             </div>
             <div
               style={{
-                fontFamily: 'Merriweather',
-                fontSize: 124,
-                lineHeight: 0.92,
+                fontFamily: 'Barlow',
+                fontSize: 136,
+                lineHeight: 0.88,
                 fontWeight: 700,
-                letterSpacing: '-0.05em',
+                letterSpacing: '-0.06em',
                 color: '#4ec9b0',
+                textTransform: 'uppercase',
               }}
             >
               to Go
@@ -162,9 +159,10 @@ export async function createSocialImage() {
               flexDirection: 'column',
               gap: 10,
               maxWidth: 820,
-              fontFamily: 'Merriweather',
-              fontSize: 30,
-              lineHeight: 1.35,
+              fontFamily: 'Barlow',
+              fontSize: 31,
+              lineHeight: 1.42,
+              fontWeight: 400,
               color: '#c9cada',
             }}
           >
@@ -245,14 +243,14 @@ export async function createSocialImage() {
       ...socialImageSize,
       fonts: [
         {
-          name: 'Merriweather',
-          data: merriweatherRegular,
+          name: 'Barlow',
+          data: barlowRegular,
           style: 'normal',
           weight: 400,
         },
         {
-          name: 'Merriweather',
-          data: merriweatherBold,
+          name: 'Barlow',
+          data: barlowBold,
           style: 'normal',
           weight: 700,
         },
