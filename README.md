@@ -1,7 +1,7 @@
 <!-- markdownlint-disable MD033 -->
 
 <p align="center">
-  <img src="./public/assets/go-for-java-developers-banner.png" alt="Go for Java Developers Banner" width="960">
+  <img src="./public/og-image.svg" alt="Java2Go preview">
 </p>
 
 ## Go for Java Developers

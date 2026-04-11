@@ -1,51 +1,45 @@
 import type { Metadata } from 'next';
+import '@fontsource/merriweather/400.css';
+import '@fontsource/merriweather/700.css';
+import '@fontsource/fira-code/400.css';
+import '@fontsource/fira-code/500.css';
 import './globals.css';
 import DesktopSidebar from '@/components/DesktopSidebar';
 import MobileNav from '@/components/MobileNav';
 import sections from '@/data/sections';
-import { getSiteUrlObject } from '@/lib/site';
+import { getSiteUrlObject, siteConfig } from '@/lib/site';
 
 export const metadata: Metadata = {
   metadataBase: getSiteUrlObject(),
   title: {
-    default: 'Java to Go Guide for Developers',
-    template: '%s | Java to Go Guide',
+    default: siteConfig.title,
+    template: '%s | Java2Go',
   },
-  description:
-    'Learn Go for Java developers with side-by-side examples, concurrency patterns, error handling, and practical Go architecture guidance.',
-  keywords: [
-    'java to go guide',
-    'learn go for java developers',
-    'go for java devs',
-    'java vs go',
-    'golang tutorial for java developers',
-    'goroutines vs threads',
-    'go error handling',
-  ],
+  description: siteConfig.description,
+  keywords: [...siteConfig.keywords],
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: 'Java to Go Guide for Developers',
-    description:
-      'Learn Go for Java developers with side-by-side examples, concurrency patterns, error handling, and practical Go architecture guidance.',
+    title: siteConfig.title,
+    description: siteConfig.description,
     type: 'website',
     url: '/',
     images: [
       {
-        url: '/assets/go-for-java-developers-banner.png',
+        url: siteConfig.ogImagePath,
         width: 1200,
         height: 630,
-        alt: 'Go for Java Developers banner',
+        alt: siteConfig.ogImageAlt,
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Java to Go Guide for Developers',
-    description:
-      'Learn Go for Java developers with side-by-side examples, concurrency patterns, error handling, and practical Go architecture guidance.',
-    images: ['/assets/go-for-java-developers-banner.png'],
+    title: siteConfig.title,
+    description: siteConfig.description,
+    images: [siteConfig.twitterImagePath],
+    creator: siteConfig.creator,
   },
 };
 
