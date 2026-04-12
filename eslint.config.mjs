@@ -7,11 +7,5 @@ export default defineConfig([
   ...nextVitals,
   ...nextTs,
   prettierConfig,
-  globalIgnores([
-    '.next/**',
-    'out/**',
-    'build/**',
-    'next-env.d.ts',
-    'postcss.config.js',
-  ]),
+  globalIgnores(['.next/**', 'out/**', 'build/**', 'next-env.d.ts', 'postcss.config.js']),
 ]);
