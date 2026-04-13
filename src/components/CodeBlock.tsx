@@ -41,6 +41,7 @@ export default function CodeBlock({ highlightedHtml, lang, label, rawCode }: Cod
         <button
           onClick={copy}
           type="button"
+          className="inline-flex items-center justify-center rounded"
           style={{
             background: 'none',
             border: `1px solid ${borderC}`,
@@ -48,9 +49,8 @@ export default function CodeBlock({ highlightedHtml, lang, label, rawCode }: Cod
             color: btnC,
             cursor: 'pointer',
             fontSize: 10,
-            minWidth: 44,
-            minHeight: 44,
-            padding: '8px 12px',
+            lineHeight: 1,
+            padding: '6px 9px',
             fontFamily: 'monospace',
             transition: 'color 0.2s',
           }}

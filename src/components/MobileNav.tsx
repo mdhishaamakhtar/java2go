@@ -97,28 +97,27 @@ export default function MobileNav({ sections }: MobileNavProps) {
           ref={openButtonRef}
           onClick={() => setOpen(true)}
           type="button"
-          className="rounded-md p-3"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-md"
           style={{
             color: 'var(--text-secondary)',
             background: 'var(--bg-elevated)',
-            minWidth: 44,
-            minHeight: 44,
           }}
           aria-label="Open menu"
           aria-expanded={open}
           aria-controls={drawerId}
-        >
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
           >
-            <line x1="3" y1="6" x2="21" y2="6" />
-            <line x1="3" y1="12" x2="21" y2="12" />
-            <line x1="3" y1="18" x2="21" y2="18" />
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              style={{ display: 'block' }}
+            >
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="18" x2="21" y2="18" />
           </svg>
         </button>
       </header>
@@ -156,12 +155,10 @@ export default function MobileNav({ sections }: MobileNavProps) {
               ref={closeButtonRef}
               onClick={() => setOpen(false)}
               type="button"
-              className="absolute right-3 top-3 rounded p-2.5"
+              className="absolute right-3 top-3 inline-flex h-11 w-11 items-center justify-center rounded-md"
               style={{
                 color: 'var(--text-secondary)',
                 background: 'var(--bg-elevated)',
-                minWidth: 44,
-                minHeight: 44,
               }}
               aria-label="Close menu"
             >
@@ -172,6 +169,7 @@ export default function MobileNav({ sections }: MobileNavProps) {
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
+                style={{ display: 'block' }}
               >
                 <line x1="18" y1="6" x2="6" y2="18" />
                 <line x1="6" y1="6" x2="18" y2="18" />
