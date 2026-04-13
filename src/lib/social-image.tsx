@@ -48,7 +48,7 @@ export async function createSocialImage() {
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 14,
+            gap: 42,
           }}
         >
           <div
