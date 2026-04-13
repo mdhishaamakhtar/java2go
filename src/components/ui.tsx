@@ -52,7 +52,7 @@ export function Note({ children, type = 'info' }: { children: React.ReactNode; t
         padding: '10px 14px',
         background: s.bg,
         border: `1px solid ${s.border}`,
-        borderLeft: `3px solid ${s.border}`,
+        boxShadow: `inset 0 1px 0 color-mix(in srgb, ${s.border} 38%, transparent)`,
       }}
     >
       <span style={{ color: s.text, fontSize: 13 }}>
@@ -103,7 +103,7 @@ export function H2({ children }: { children: React.ReactNode }) {
     <h4
       className="font-semibold uppercase tracking-widest"
       style={{
-        color: '#a0a0c0',
+        color: 'var(--text-muted)',
         fontSize: 13,
         fontWeight: 600,
         margin: '18px 0 4px',
@@ -151,9 +151,9 @@ export function Callout({
       className="my-4 rounded-lg"
       style={{
         padding: '14px 16px',
-        background: '#0a0a16',
-        border: '1px solid #2a2a4a',
-        borderLeft: `3px solid ${c}`,
+        background: 'var(--bg-panel)',
+        border: `1px solid color-mix(in srgb, ${c} 30%, var(--border-subtle))`,
+        boxShadow: `inset 0 1px 0 color-mix(in srgb, ${c} 28%, transparent)`,
       }}
     >
       <div className="mb-2 font-bold uppercase tracking-widest" style={{ color: c, fontSize: 11 }}>
@@ -176,12 +176,12 @@ export function WhyBox({ children }: { children: React.ReactNode }) {
         padding: '10px 14px',
         background: 'var(--note-why-bg)',
         border: '1px solid var(--note-why-border)',
-        borderLeft: '3px solid #2e7a7a',
+        boxShadow: 'inset 0 1px 0 color-mix(in srgb, var(--note-why-border) 40%, transparent)',
       }}
     >
       <span
         className="mr-2 font-bold uppercase tracking-widest"
-        style={{ color: '#5a9a9a', fontSize: 11 }}
+        style={{ color: 'var(--note-why-text)', fontSize: 11 }}
       >
         Why Go does this
       </span>

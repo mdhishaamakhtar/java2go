@@ -18,7 +18,6 @@ export default function DesktopSidebar({ sections }: DesktopSidebarProps) {
         width: collapsed ? 78 : 280,
         background: 'var(--bg-surface)',
         borderRight: '1px solid var(--border-dim)',
-        transition: 'width 0.25s ease',
       }}
     >
       <div
@@ -31,7 +30,7 @@ export default function DesktopSidebar({ sections }: DesktopSidebarProps) {
         <button
           type="button"
           onClick={() => setCollapsed((v) => !v)}
-          className="rounded-md px-2 py-1 text-xs"
+          className="rounded-md px-3 py-2 text-xs"
           style={{
             color: 'var(--text-secondary)',
             background: 'var(--bg-elevated)',

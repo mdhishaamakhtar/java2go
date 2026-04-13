@@ -22,7 +22,7 @@ export default function CodeBlock({ highlightedHtml, lang, label, rawCode }: Cod
   const headerBg = 'var(--bg-elevated)';
   const bodyBg = 'var(--bg-surface)';
   const borderC = 'var(--border-subtle)';
-  const labelC = '#555570';
+  const labelC = 'var(--text-muted)';
   const btnC = copied ? 'var(--accent-cyan)' : labelC;
 
   return (
@@ -40,6 +40,7 @@ export default function CodeBlock({ highlightedHtml, lang, label, rawCode }: Cod
         </span>
         <button
           onClick={copy}
+          type="button"
           style={{
             background: 'none',
             border: `1px solid ${borderC}`,
@@ -47,7 +48,9 @@ export default function CodeBlock({ highlightedHtml, lang, label, rawCode }: Cod
             color: btnC,
             cursor: 'pointer',
             fontSize: 10,
-            padding: '2px 8px',
+            minWidth: 44,
+            minHeight: 44,
+            padding: '8px 12px',
             fontFamily: 'monospace',
             transition: 'color 0.2s',
           }}
@@ -58,7 +61,7 @@ export default function CodeBlock({ highlightedHtml, lang, label, rawCode }: Cod
 
       {/* Code */}
       <div
-        style={{ background: bodyBg, overflow: 'hidden' }}
+        style={{ background: bodyBg }}
         dangerouslySetInnerHTML={{ __html: highlightedHtml }}
       />
     </div>

@@ -105,15 +105,15 @@ export default function SectionRenderer({ renderedBlocks }: SectionRendererProps
 
           case 'table':
             return (
-              <div key={i} className="my-3.5 grid gap-3" style={{ gridTemplateColumns: '1fr 1fr' }}>
+              <div key={i} className="my-3.5 grid grid-cols-1 gap-3 md:grid-cols-2">
                 {block.rows.map(([java, go], j) => (
                   <div
                     key={j}
                     className="rounded-md"
                     style={{
-                      background: '#0a0a16',
+                      background: 'var(--bg-panel)',
                       padding: '10px 12px',
-                      border: '1px solid #1a1a2e',
+                      border: '1px solid var(--border-panel)',
                     }}
                   >
                     <div style={{ color: 'var(--accent-java)', fontSize: 11, marginBottom: 3 }}>

@@ -11,13 +11,13 @@ export const socialImageSize = {
 export const socialImageAlt = siteConfig.ogImageAlt;
 
 async function loadFont(path: string) {
-  return readFile(join(process.cwd(), path));
+  return readFile(join(process.cwd(), 'public', 'fonts', path));
 }
 
 export async function createSocialImage() {
   const [barlowRegular, barlowBold] = await Promise.all([
-    loadFont('node_modules/@fontsource/barlow/files/barlow-latin-400-normal.woff'),
-    loadFont('node_modules/@fontsource/barlow/files/barlow-latin-700-normal.woff'),
+    loadFont('barlow-latin-400-normal.woff'),
+    loadFont('barlow-latin-700-normal.woff'),
   ]);
 
   return new ImageResponse(

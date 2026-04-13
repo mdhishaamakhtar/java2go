@@ -62,7 +62,7 @@ export default function Home() {
             <Link
               key={section.id}
               href={`/sections/${section.id}`}
-              className="rounded-md px-4 py-3 transition-colors"
+              className="rounded-md px-4 py-4 transition-colors"
               style={{
                 background: 'var(--bg-elevated)',
                 border: '1px solid var(--border-subtle)',
@@ -90,7 +90,7 @@ export default function Home() {
               <Link
                 href={`/sections/${section.id}`}
                 style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}
-                className="block rounded-md px-3 py-2 transition-colors hover:bg-[var(--bg-surface)]"
+                className="block rounded-md px-3 py-3 transition-colors hover:bg-[var(--bg-surface)]"
               >
                 <span className="mr-2 font-mono text-xs" style={{ color: 'var(--text-muted)' }}>
                   {section.title}

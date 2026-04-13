@@ -14,11 +14,12 @@
   --border-dim: #16162a;
   --border-subtle: #2a2a3a;
   --border-java: #3a3a1a;
+  --border-panel: #24243a;
 
   /* Text */
   --text-primary: #e2e2f0;
   --text-secondary: #8b8ba7;
-  --text-muted: #505070;
+  --text-muted: #7a7aa0;
   --text-dim: #3a3a5c;
 
   /* Accent */
@@ -52,6 +53,7 @@
   --note-why-bg: #0d1a1a;
   --note-why-border: #1e4a4a;
   --note-why-text: #7ed4c0;
+  --bg-panel: #0a0a16;
 }
 
 html,
@@ -59,6 +61,12 @@ body {
   background-color: var(--bg-base);
   color: var(--text-primary);
   font-family: 'Barlow', 'Segoe UI', system-ui, sans-serif;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
 }
 
 /* Shiki code block overrides */

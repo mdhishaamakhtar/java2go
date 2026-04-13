@@ -108,7 +108,10 @@ export default async function SectionPage({ params }: SectionPageProps) {
       <SectionRenderer renderedBlocks={renderedBlocks} />
 
       {/* Prev / Next navigation */}
-      <nav className="mt-12 flex gap-4 pt-6" style={{ borderTop: '1px solid var(--border-dim)' }}>
+      <nav
+        className="mt-12 flex flex-col gap-4 pt-6 md:flex-row"
+        style={{ borderTop: '1px solid var(--border-dim)' }}
+      >
         {prev ? (
           <Link
             href={`/sections/${prev.id}`}
