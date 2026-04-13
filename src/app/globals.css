@@ -3,6 +3,20 @@
 @tailwind utilities;
 
 :root {
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --drawer-enter-duration: 280ms;
+  --drawer-exit-duration: 210ms;
+
+  /* Type scale */
+  --text-caption: 0.875rem;
+  --text-label: 0.9375rem;
+  --text-body: 1.0625rem;
+  --text-body-lg: 1.125rem;
+  --text-subheading: 1.25rem;
+  --text-heading: 1.625rem;
+  --text-display: clamp(2.25rem, 5vw, 3.5rem);
+
   /* Backgrounds */
   --bg-base: #080812;
   --bg-surface: #0d0d18;
@@ -61,6 +75,8 @@ body {
   background-color: var(--bg-base);
   color: var(--text-primary);
   font-family: 'Barlow', 'Segoe UI', system-ui, sans-serif;
+  font-size: 16px;
+  font-kerning: normal;
 }
 
 a:focus-visible,
@@ -72,9 +88,9 @@ button:focus-visible {
 /* Shiki code block overrides */
 .shiki {
   margin: 0;
-  padding: 12px 16px;
+  padding: 14px 18px;
   overflow-x: auto;
-  font-size: 12px;
+  font-size: 0.875rem;
   line-height: 1.8;
   font-family: 'Fira Code', 'JetBrains Mono', 'Cascadia Code', monospace;
   background: transparent !important;
@@ -98,4 +114,34 @@ button:focus-visible {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-muted);
+}
+
+.drawer-backdrop {
+  opacity: 0;
+  transition: opacity var(--drawer-enter-duration) var(--ease-out-quart);
+}
+
+.drawer-backdrop[data-state='open'] {
+  opacity: 1;
+}
+
+.drawer-panel {
+  transform: translateX(-24px);
+  opacity: 0;
+  transition:
+    transform var(--drawer-enter-duration) var(--ease-out-quint),
+    opacity var(--drawer-enter-duration) var(--ease-out-quart);
+  will-change: transform, opacity;
+}
+
+.drawer-panel[data-state='open'] {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drawer-backdrop,
+  .drawer-panel {
+    transition: none !important;
+  }
 }

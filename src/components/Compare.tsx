@@ -1,4 +1,5 @@
 import CodeBlock from './CodeBlock';
+import { LanguageLabel } from './BrandMarks';
 
 interface CompareProps {
   javaHtml: string;
@@ -23,13 +24,21 @@ export default function Compare({
         <CodeBlock
           highlightedHtml={javaHtml}
           lang="java"
-          label={`☕  ${javaLabel || 'Java'}`}
+          label={
+            <LanguageLabel language="java" size={13}>
+              {javaLabel || 'Java'}
+            </LanguageLabel>
+          }
           rawCode={javaRaw}
         />
         <CodeBlock
           highlightedHtml={goHtml}
           lang="go"
-          label={`◎  ${goLabel || 'Go'}`}
+          label={
+            <LanguageLabel language="go" size={13}>
+              {goLabel || 'Go'}
+            </LanguageLabel>
+          }
           rawCode={goRaw}
         />
       </div>

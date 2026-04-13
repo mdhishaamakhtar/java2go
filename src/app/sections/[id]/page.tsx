@@ -91,14 +91,21 @@ export default async function SectionPage({ params }: SectionPageProps) {
       />
 
       {/* Section header */}
-      <header className="mb-8">
+      <header className="mb-10">
         <div
-          className="mb-1 font-mono text-xs uppercase tracking-widest"
+          className="mb-2 font-mono text-sm uppercase tracking-widest"
           style={{ color: 'var(--text-muted)' }}
         >
           Section {section.title}
         </div>
-        <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>
+        <h1
+          className="font-bold tracking-tight"
+          style={{
+            color: 'var(--text-primary)',
+            fontSize: 'clamp(2rem, 4vw, 2.8rem)',
+            lineHeight: 1.08,
+          }}
+        >
           {section.label}
         </h1>
         <div className="mt-2 h-px w-16" style={{ background: 'var(--accent-cyan)' }} />
@@ -122,10 +129,22 @@ export default async function SectionPage({ params }: SectionPageProps) {
               textDecoration: 'none',
             }}
           >
-            <div style={{ color: 'var(--text-muted)', fontSize: 10, marginBottom: 4 }}>
+            <div
+              style={{
+                color: 'var(--text-muted)',
+                fontSize: 'var(--text-caption)',
+                marginBottom: 6,
+              }}
+            >
               ← Previous
             </div>
-            <div style={{ color: 'var(--text-primary)', fontSize: 13, fontWeight: 500 }}>
+            <div
+              style={{
+                color: 'var(--text-primary)',
+                fontSize: 'var(--text-label)',
+                fontWeight: 500,
+              }}
+            >
               {prev.title} · {prev.label}
             </div>
           </Link>
@@ -143,8 +162,22 @@ export default async function SectionPage({ params }: SectionPageProps) {
               textDecoration: 'none',
             }}
           >
-            <div style={{ color: 'var(--text-muted)', fontSize: 10, marginBottom: 4 }}>Next →</div>
-            <div style={{ color: 'var(--text-primary)', fontSize: 13, fontWeight: 500 }}>
+            <div
+              style={{
+                color: 'var(--text-muted)',
+                fontSize: 'var(--text-caption)',
+                marginBottom: 6,
+              }}
+            >
+              Next →
+            </div>
+            <div
+              style={{
+                color: 'var(--text-primary)',
+                fontSize: 'var(--text-label)',
+                fontWeight: 500,
+              }}
+            >
               {next.title} · {next.label}
             </div>
           </Link>

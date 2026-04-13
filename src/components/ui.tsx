@@ -1,4 +1,5 @@
 import React from 'react';
+import { JavaMark } from './BrandMarks';
 
 // ─── Note ──────────────────────────────────────────────────────────────────
 
@@ -13,7 +14,7 @@ const NOTE_STYLES = {
     bg: 'var(--note-java-bg)',
     border: 'var(--note-java-border)',
     text: 'var(--note-java-text)',
-    icon: '☕',
+    icon: '',
   },
   warn: {
     bg: 'var(--note-warn-bg)',
@@ -45,19 +46,24 @@ export type NoteType = keyof typeof NOTE_STYLES;
 
 export function Note({ children, type = 'info' }: { children: React.ReactNode; type?: NoteType }) {
   const s = NOTE_STYLES[type];
+  const icon =
+    type === 'java' ? <JavaMark size={14} /> : <span className="opacity-80">{s.icon}</span>;
   return (
     <div
       className="my-3 rounded-lg"
       style={{
-        padding: '10px 14px',
+        padding: '14px 16px',
         background: s.bg,
         border: `1px solid ${s.border}`,
         boxShadow: `inset 0 1px 0 color-mix(in srgb, ${s.border} 38%, transparent)`,
       }}
     >
-      <span style={{ color: s.text, fontSize: 13 }}>
-        <span className="mr-2 opacity-80">{s.icon}</span>
-        {children}
+      <span
+        className="inline-flex items-start gap-2.5"
+        style={{ color: s.text, fontSize: 'var(--text-label)', lineHeight: 1.7 }}
+      >
+        <span className="mt-[1px] shrink-0">{icon}</span>
+        <span>{children}</span>
       </span>
     </div>
   );
@@ -69,7 +75,7 @@ export function Prose({ children }: { children: React.ReactNode }) {
   return (
     <p
       className="my-2.5 leading-relaxed"
-      style={{ color: 'var(--text-secondary)', fontSize: 14, lineHeight: 1.9 }}
+      style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-body)', lineHeight: 1.9 }}
     >
       {children}
     </p>
@@ -84,11 +90,12 @@ export function H({ children }: { children: React.ReactNode }) {
       className="mb-2 pb-1.5 font-bold"
       style={{
         color: 'var(--text-primary)',
-        fontSize: 15,
+        fontSize: 'var(--text-heading)',
         fontWeight: 700,
-        margin: '26px 0 8px',
+        lineHeight: 1.25,
+        margin: '34px 0 12px',
         borderBottom: '1px solid var(--border-dim)',
-        paddingBottom: 6,
+        paddingBottom: 8,
       }}
     >
       {children}
@@ -104,9 +111,9 @@ export function H2({ children }: { children: React.ReactNode }) {
       className="font-semibold uppercase tracking-widest"
       style={{
         color: 'var(--text-muted)',
-        fontSize: 13,
+        fontSize: 'var(--text-label)',
         fontWeight: 600,
-        margin: '18px 0 4px',
+        margin: '22px 0 6px',
       }}
     >
       {children}
@@ -124,7 +131,7 @@ export function Tag({ children }: { children: React.ReactNode }) {
         color: 'var(--syn-keyword)',
         padding: '1px 6px',
         borderRadius: 4,
-        fontSize: 12,
+        fontSize: '0.875rem',
         fontFamily: 'monospace',
         border: '1px solid var(--border-subtle)',
       }}
@@ -150,16 +157,21 @@ export function Callout({
     <div
       className="my-4 rounded-lg"
       style={{
-        padding: '14px 16px',
+        padding: '16px 18px',
         background: 'var(--bg-panel)',
         border: `1px solid color-mix(in srgb, ${c} 30%, var(--border-subtle))`,
         boxShadow: `inset 0 1px 0 color-mix(in srgb, ${c} 28%, transparent)`,
       }}
     >
-      <div className="mb-2 font-bold uppercase tracking-widest" style={{ color: c, fontSize: 11 }}>
+      <div
+        className="mb-2 font-bold uppercase tracking-widest"
+        style={{ color: c, fontSize: 'var(--text-caption)' }}
+      >
         {title}
       </div>
-      <div style={{ color: 'var(--text-secondary)', fontSize: 13, lineHeight: 1.85 }}>
+      <div
+        style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-body)', lineHeight: 1.85 }}
+      >
         {children}
       </div>
     </div>
@@ -173,7 +185,7 @@ export function WhyBox({ children }: { children: React.ReactNode }) {
     <div
       className="my-2.5 rounded-lg"
       style={{
-        padding: '10px 14px',
+        padding: '14px 16px',
         background: 'var(--note-why-bg)',
         border: '1px solid var(--note-why-border)',
         boxShadow: 'inset 0 1px 0 color-mix(in srgb, var(--note-why-border) 40%, transparent)',
@@ -181,11 +193,15 @@ export function WhyBox({ children }: { children: React.ReactNode }) {
     >
       <span
         className="mr-2 font-bold uppercase tracking-widest"
-        style={{ color: 'var(--note-why-text)', fontSize: 11 }}
+        style={{ color: 'var(--note-why-text)', fontSize: 'var(--text-caption)' }}
       >
         Why Go does this
       </span>
-      <span style={{ color: 'var(--note-why-text)', fontSize: 13 }}>{children}</span>
+      <span
+        style={{ color: 'var(--note-why-text)', fontSize: 'var(--text-label)', lineHeight: 1.7 }}
+      >
+        {children}
+      </span>
     </div>
   );
 }

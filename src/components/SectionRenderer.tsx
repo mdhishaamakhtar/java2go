@@ -4,6 +4,7 @@ import { highlight } from '@/lib/highlight';
 import { Note, Prose, H, H2, Tag, Callout, WhyBox } from './ui';
 import CodeBlock from './CodeBlock';
 import Compare from './Compare';
+import { LanguageLabel } from './BrandMarks';
 
 // Lightweight rich-text parser for section copy.
 function parseRichText(text: string): React.ReactNode[] {
@@ -105,21 +106,31 @@ export default function SectionRenderer({ renderedBlocks }: SectionRendererProps
 
           case 'table':
             return (
-              <div key={i} className="my-3.5 grid grid-cols-1 gap-3 md:grid-cols-2">
+              <div key={i} className="my-4 grid grid-cols-1 gap-3.5 md:grid-cols-2">
                 {block.rows.map(([java, go], j) => (
                   <div
                     key={j}
-                    className="rounded-md"
+                    className="grid gap-2 rounded-md"
                     style={{
                       background: 'var(--bg-panel)',
-                      padding: '10px 12px',
+                      padding: '14px 16px',
                       border: '1px solid var(--border-panel)',
                     }}
                   >
-                    <div style={{ color: 'var(--accent-java)', fontSize: 11, marginBottom: 3 }}>
-                      ☕ {java}
-                    </div>
-                    <div style={{ color: 'var(--note-info-text)', fontSize: 11 }}>◎ {go}</div>
+                    <LanguageLabel
+                      language="java"
+                      size={13}
+                      className="text-[0.9375rem] leading-relaxed"
+                    >
+                      {java}
+                    </LanguageLabel>
+                    <LanguageLabel
+                      language="go"
+                      size={13}
+                      className="text-[0.9375rem] leading-relaxed"
+                    >
+                      {go}
+                    </LanguageLabel>
                   </div>
                 ))}
               </div>

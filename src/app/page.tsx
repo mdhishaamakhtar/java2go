@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import sections from '@/data/sections';
+import { JavaToGoLockup } from '@/components/BrandMarks';
 import { getSiteUrl } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -36,25 +37,45 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
 
-      <header className="mb-8">
+      <header className="mb-10">
         <p
           className="mb-2 font-mono text-xs uppercase tracking-widest"
           style={{ color: 'var(--accent-cyan)' }}
         >
           Java Developer Path
         </p>
-        <h1 className="text-3xl font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>
-          Java to Go Guide
-        </h1>
-        <p className="mt-3 max-w-3xl leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+        <div className="flex items-center gap-3">
+          <JavaToGoLockup className="inline-flex items-center gap-2" />
+          <h1
+            className="font-bold tracking-tight"
+            style={{
+              color: 'var(--text-primary)',
+              fontSize: 'var(--text-display)',
+              lineHeight: 1.03,
+            }}
+          >
+            Java to Go Guide
+          </h1>
+        </div>
+        <p
+          className="mt-4 max-w-[65ch] leading-relaxed"
+          style={{
+            color: 'var(--text-secondary)',
+            fontSize: 'var(--text-body-lg)',
+            lineHeight: 1.8,
+          }}
+        >
           Learn Go for Java developers through direct comparisons, mental model shifts, and
           production-oriented patterns. This guide is designed for Java engineers moving into Go
           backend development.
         </p>
       </header>
 
-      <section className="mb-8 rounded-lg p-5" style={{ background: 'var(--bg-surface)' }}>
-        <h2 className="mb-3 text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
+      <section className="mb-8 rounded-lg p-6" style={{ background: 'var(--bg-surface)' }}>
+        <h2
+          className="mb-4 font-semibold"
+          style={{ color: 'var(--text-primary)', fontSize: 'var(--text-subheading)' }}
+        >
           Start With These Sections
         </h2>
         <div className="grid gap-3 md:grid-cols-2">
@@ -69,10 +90,13 @@ export default function Home() {
                 textDecoration: 'none',
               }}
             >
-              <div className="font-mono text-xs" style={{ color: 'var(--accent-cyan)' }}>
+              <div className="font-mono text-sm" style={{ color: 'var(--accent-cyan)' }}>
                 Section {section.title}
               </div>
-              <div className="mt-1 font-medium" style={{ color: 'var(--text-primary)' }}>
+              <div
+                className="mt-1.5 font-medium"
+                style={{ color: 'var(--text-primary)', fontSize: 'var(--text-body)' }}
+              >
                 {section.label}
               </div>
             </Link>
@@ -81,7 +105,10 @@ export default function Home() {
       </section>
 
       <section>
-        <h2 className="mb-3 text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
+        <h2
+          className="mb-4 font-semibold"
+          style={{ color: 'var(--text-primary)', fontSize: 'var(--text-subheading)' }}
+        >
           Full Table of Contents
         </h2>
         <ul className="grid gap-2 md:grid-cols-2">
@@ -92,10 +119,10 @@ export default function Home() {
                 style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}
                 className="block rounded-md px-3 py-3 transition-colors hover:bg-[var(--bg-surface)]"
               >
-                <span className="mr-2 font-mono text-xs" style={{ color: 'var(--text-muted)' }}>
+                <span className="mr-2 font-mono text-sm" style={{ color: 'var(--text-muted)' }}>
                   {section.title}
                 </span>
-                <span>{section.label}</span>
+                <span style={{ fontSize: 'var(--text-body)' }}>{section.label}</span>
               </Link>
             </li>
           ))}
