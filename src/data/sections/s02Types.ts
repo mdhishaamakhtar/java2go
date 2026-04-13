@@ -84,7 +84,10 @@ var s Status = StatusActive
 // Named type prevents accidental mixing:
 func SetStatus(s Status) {}
 SetStatus(StatusActive)  // ok
-SetStatus(1)             // compile error — int != Status`,
+SetStatus(42)            // ok — untyped constant, implicitly converts
+
+var i int = 1
+SetStatus(i)             // compile error — int ≠ Status`,
     },
     {
       type: 'why',

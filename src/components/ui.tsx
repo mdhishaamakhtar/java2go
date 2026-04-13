@@ -62,7 +62,12 @@ export function Note({ children, type = 'info' }: { children: React.ReactNode; t
         className="inline-flex items-start gap-2.5"
         style={{ color: s.text, fontSize: 'var(--text-label)', lineHeight: 1.7 }}
       >
-        <span className="mt-[1px] shrink-0">{icon}</span>
+        <span
+          className="shrink-0"
+          style={{ display: 'inline-flex', alignItems: 'center', height: '1.7em' }}
+        >
+          {icon}
+        </span>
         <span>{children}</span>
       </span>
     </div>

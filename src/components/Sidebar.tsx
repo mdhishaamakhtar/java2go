@@ -75,12 +75,13 @@ export default function Sidebar({ sections, onClose, collapsed = false }: Sideba
           }}
         >
           <span
-            className="shrink-0 font-mono"
+            className="shrink-0"
             style={{
               color: pathname === '/' ? 'var(--accent-cyan)' : 'var(--text-muted)',
-              fontSize: collapsed ? 11 : 10,
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
               minWidth: collapsed ? 24 : 20,
-              textAlign: 'center',
             }}
           >
             <GoMark size={collapsed ? 14 : 12} />
