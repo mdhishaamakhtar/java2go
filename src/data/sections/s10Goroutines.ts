@@ -107,6 +107,11 @@ for _, msg := range messages {
     }(msg)  // msg evaluated HERE, copied into m
 }`,
     },
+    {
+      type: 'note',
+      noteType: 'info',
+      text: '**Go 1.22+ fix:** Starting with Go 1.22 (Feb 2024), loop variables are scoped per-iteration, so the closure capture bug above no longer occurs in new code. The pass-as-argument pattern is still valid and worth knowing — you will encounter it in pre-1.22 codebases and it makes the intent explicit.',
+    },
     { type: 'heading', text: 'WaitGroup — waiting for goroutines to finish' },
     {
       type: 'compare',

@@ -112,16 +112,14 @@ export function LanguageLabel({ language, children, size = 14, className }: Lang
       className={className}
       style={{
         display: 'inline-flex',
-        alignItems: 'baseline',
+        alignItems: 'center',
         gap: 8,
         color,
         minWidth: 0,
         verticalAlign: 'middle',
       }}
     >
-      <span style={{ display: 'inline-flex', alignItems: 'center', transform: 'translateY(1px)' }}>
-        <Mark size={size} className="shrink-0" />
-      </span>
+      <Mark size={size} className="shrink-0" />
       <span style={{ minWidth: 0, flex: 1 }}>{children}</span>
     </span>
   );
