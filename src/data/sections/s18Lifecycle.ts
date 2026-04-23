@@ -2,7 +2,7 @@ import type { Section } from '@/types/section';
 
 const section: Section = {
   id: 'lifecycle',
-  title: '18',
+  title: '20',
   label: 'Init & Main Lifecycle',
   blocks: [
     {

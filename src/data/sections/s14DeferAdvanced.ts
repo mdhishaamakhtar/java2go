@@ -2,7 +2,7 @@ import type { Section } from '@/types/section';
 
 const section: Section = {
   id: 'defer-advanced',
-  title: '14',
+  title: '16',
   label: 'Defer — Advanced',
   blocks: [
     {
