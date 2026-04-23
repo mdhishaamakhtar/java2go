@@ -2,7 +2,7 @@ import type { Section } from '@/types/section';
 
 const section: Section = {
   id: 'goroutine-mgmt',
-  title: '13',
+  title: '14',
   label: 'Goroutine Management',
   blocks: [
     {

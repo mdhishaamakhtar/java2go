@@ -2,7 +2,7 @@ import type { Section } from '@/types/section';
 
 const section: Section = {
   id: 'project',
-  title: '19',
+  title: '21',
   label: 'Project Layout',
   blocks: [
     {
@@ -53,7 +53,7 @@ const section: Section = {
 </dependencies>`,
       go: `module github.com/mycompany/engine
 
-go 1.22
+go 1.24
 
 require (
     github.com/gin-gonic/gin   v1.9.1

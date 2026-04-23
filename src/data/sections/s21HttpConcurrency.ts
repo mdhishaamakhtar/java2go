@@ -2,7 +2,7 @@ import type { Section } from '@/types/section';
 
 const section: Section = {
   id: 'http-concurrency',
-  title: '20',
+  title: '23',
   label: 'HTTP Concurrency Model',
   blocks: [
     {
@@ -131,6 +131,11 @@ func main() {
       title: "Go's M:N scheduler — how goroutines stay cheap",
       color: '#4ec9b0',
       text: 'Go uses **M:N scheduling**: M goroutines are multiplexed onto N OS threads, where N = `GOMAXPROCS` (defaults to number of CPU cores).\n\nWhen a goroutine blocks on I/O (DB query, HTTP call, file read), the Go runtime **parks the goroutine** and immediately assigns another runnable goroutine to that OS thread. The OS thread never sits idle.\n\nWhen the I/O completes, the goroutine becomes runnable again and is scheduled back onto any available OS thread.\n\nResult: thousands of concurrent I/O-bound goroutines, running on just a handful of OS threads — without the code complexity of reactive streams.',
+    },
+    {
+      type: 'note',
+      noteType: 'tip',
+      text: '**Go 1.22+:** `net/http.ServeMux` now supports method and wildcard routing natively — `http.HandleFunc("GET /api/messages/{id}", handler)`. For simple services the standard library is sufficient. Gin adds middleware chaining, request binding, validation, and richer error handling — not basic routing.',
     },
     { type: 'heading', text: 'Comparing the models' },
     {

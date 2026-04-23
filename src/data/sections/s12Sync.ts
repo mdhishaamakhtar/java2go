@@ -2,7 +2,7 @@ import type { Section } from '@/types/section';
 
 const section: Section = {
   id: 'sync',
-  title: '12',
+  title: '13',
   label: 'Sync Primitives',
   blocks: [
     {

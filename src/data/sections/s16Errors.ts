@@ -2,7 +2,7 @@ import type { Section } from '@/types/section';
 
 const section: Section = {
   id: 'errors',
-  title: '16',
+  title: '18',
   label: 'Error Handling',
   blocks: [
     {

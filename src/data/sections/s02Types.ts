@@ -2,7 +2,7 @@ import type { Section } from '@/types/section';
 
 const section: Section = {
   id: 'types',
-  title: '02',
+  title: '03',
   label: 'Types & Variables',
   blocks: [
     {
