@@ -151,7 +151,7 @@ export default function Sidebar({ sections, onClose, collapsed = false }: Sideba
       {!collapsed && (
         <div className="px-5 pt-3" style={{ borderTop: '1px solid var(--border-dim)' }}>
           <div style={{ color: 'var(--text-muted)', fontSize: '0.8125rem', lineHeight: 1.6 }}>
-            21 sections · MIT License
+            21 sections · GPL-3.0 License
           </div>
         </div>
       )}
