@@ -66,7 +66,7 @@ export default function DesktopSidebar({
 
       <div className="flex items-center justify-between gap-3 border-t border-line-dim px-5 py-3 text-caption text-muted sidebar-collapsed:justify-center sidebar-collapsed:px-2">
         <span className="sidebar-collapsed:hidden">
-          {sections.length} sections · Go {siteConfig.versions.go}
+          {sections.length} sections · GPL-3.0
         </span>
         <a
           href={siteConfig.repoUrl}
