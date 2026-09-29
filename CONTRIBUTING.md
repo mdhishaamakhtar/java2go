@@ -1,78 +1,89 @@
 # Contributing
 
-This project is content-first. Most contributions are section/content edits rather than framework changes.
+This project is content-first. Most contributions are corrections, clarifications or new sections rather than framework changes. Thank you for helping Java developers learn Go.
 
-## Project Structure
+## Setup
 
-- `src/data/sections/`: all section content files
-- `src/data/sections/index.ts`: section ordering and navigation sequence
-- `src/types/section.ts`: content block schema (`Block` union)
-- `src/components/SectionRenderer.tsx`: block renderer
-- `src/components/ui.tsx`: visual primitives for prose, notes, callouts, headings
+```bash
+bun install
+bun run dev
+```
 
-## How to Add a New Section
+Before opening a pull request, run:
 
-1. Create a new section file in `src/data/sections/` using naming pattern:
-   - `s21MyTopic.ts` (number prefix controls sort/readability)
-2. Export a `Section` object with:
-   - `id` (URL segment, e.g. `my-topic`)
-   - `title` (nav number, e.g. `"21"`)
-   - `label` (display title)
-   - `blocks` (content array)
-3. Register the file in `src/data/sections/index.ts`:
-   - add import
-   - add to `sections` array in correct order
-4. Run:
-   - `npm run lint`
-   - `npm run build`
+```bash
+bun run check   # type-check, lint, formatting
+bun run build   # also validates every section's content
+```
 
-## How to Change Existing Content
+## Project structure
 
-1. Edit the relevant file in `src/data/sections/`.
-2. Keep Java and Go examples aligned in teaching intent.
-3. Prefer small, explicit examples over large framework-heavy snippets.
-4. Validate rendering for:
-   - markdown-like text (`**bold**`, `` `inline code` ``)
-   - compare blocks
-   - long code blocks (horizontal overflow)
-5. Run:
-   - `npm run lint`
-   - `npm run build`
+| Path                                 | Purpose                                                        |
+| ------------------------------------ | -------------------------------------------------------------- |
+| `src/data/sections/<id>.ts`          | One file per section, named after its URL id                   |
+| `src/data/sections/index.ts`         | Reading order, parts, and build-time content validation        |
+| `src/types/section.ts`               | The `Block` schema every section is written in                 |
+| `src/components/SectionRenderer.tsx` | Turns blocks into HTML; code is highlighted at build time      |
+| `src/components/ui.tsx`              | Prose, headings, notes, callouts, lists and tables             |
+| `src/lib/site.ts`                    | Site URL, author, and the Go/Java versions the content targets |
 
-## Block Types (from `src/types/section.ts`)
+## Adding a section
 
-- `prose`: paragraph text
-- `heading`: section heading
-- `subheading`: smaller heading
-- `compare`: side-by-side Java and Go code
-- `codeblock`: single language code sample (`go` or `java`)
-- `note`: highlighted helper text (`info`, `java`, `warn`, `tip`, `engine`, `why`)
-- `callout`: emphasized explanatory block with title/color
-- `why`: “Why Go does this” style explanation
-- `table`: simple two-column mapping rows
+1. Create `src/data/sections/my-topic.ts`. The file name must match the section `id`, because the "Suggest an edit" link is built from it.
 
-## Content Authoring Guidelines
+   ```ts
+   import type { SectionContent } from '@/types/section';
 
-- Keep language precise and technically correct.
-- Avoid introducing unnecessary libraries when standard library examples are enough.
-- When comparing tools (Java vs Go), clearly separate:
-  - default choice
-  - performance-optimized choice
-  - ORM vs SQL-first approach
-- Keep terminology consistent across sections (e.g., “goroutine”, “receiver”, “zero value”).
+   const section: SectionContent = {
+     id: 'my-topic', // URL: /sections/my-topic
+     label: 'My Topic', // title shown everywhere
+     summary: 'One or two sentences. Used for search, the home page and meta descriptions.',
+     blocks: [
+       { type: 'prose', text: 'Start from what a Java developer already knows.' },
+       // …
+     ],
+   };
 
-## UI/UX Contribution Notes
+   export default section;
+   ```
 
-- Preserve the design system variables in `src/app/globals.css`.
-- Keep interactions lightweight (simple transitions, no heavy animation libraries).
-- Ensure desktop and mobile navigation both remain usable after content or layout changes.
+2. Import it in `src/data/sections/index.ts` and add it to the right part of the `outline`. Section numbers are derived from the order, so nothing else needs renumbering.
+3. Run `bun run build` and fix anything the content validator reports.
 
-## SEO Notes
+## Block types
 
-- Global metadata is in `src/app/layout.tsx`.
-- Per-section canonical metadata is in `src/app/sections/[id]/page.tsx`.
-- Sitemap and robots routes:
-  - `src/app/sitemap.ts`
-  - `src/app/robots.ts`
+Text fields support inline markup: `` `code` ``, `**bold**`, `[links](/sections/id#heading)`, and a blank line for a new paragraph.
 
-If changing URLs or section IDs, verify canonical, sitemap entries, and nav links remain consistent.
+| Block        | Use it for                                                                                 |
+| ------------ | ------------------------------------------------------------------------------------------ |
+| `prose`      | Paragraphs                                                                                 |
+| `heading`    | A top-level heading (`h2`); appears in the table of contents and search                    |
+| `subheading` | A nested heading (`h3`)                                                                    |
+| `list`       | Bulleted or (`ordered: true`) numbered lists                                               |
+| `compare`    | Java on the left, Go on the right. Set `javaLang`/`goLang` for non-code (`xml`, `bash`…)   |
+| `codeblock`  | A single snippet: `go`, `java`, `bash`, `xml`, `json`, `yaml`, `sql`, `dockerfile`, `text` |
+| `note`       | Short asides: `info`, `java`, `warn`, `tip`, `engine` (production concerns), `why`         |
+| `why`        | The "Why Go does this" explanation under a comparison                                      |
+| `callout`    | A titled panel; `tone` is `go`, `java`, `info`, `engine` or `warn`                         |
+| `table`      | Rows of cells. Two columns without a `head` render as Java → Go; otherwise pass `head`     |
+
+Internal links are checked at build time: a link to a missing section or heading anchor fails the build. Heading anchors are the slugified heading text (`'Goroutine leaks'` → `#goroutine-leaks`).
+
+## Content guidelines
+
+- **Be accurate and current.** The guide targets the Go and Java versions in `src/lib/site.ts`. When a feature is recent, name the version that introduced it. Compile non-trivial Go snippets before submitting (`go vet` and `go run`).
+- **Compare like with like.** Pair idiomatic modern Java (records, try-with-resources, virtual threads) with idiomatic Go. Don't compare against Java nobody writes anymore.
+- **Explain the why.** A comparison without the reasoning behind Go's choice teaches syntax, not the mental model.
+- **Prefer the standard library.** Introduce third-party libraries only when they are the de facto choice, and say so.
+- **Keep snippets small.** Side-by-side code reads best when lines stay under about 60 characters.
+- **Use consistent terms:** goroutine, receiver, zero value, method set, interface satisfaction.
+
+## Design notes
+
+The visual system is documented in [`.impeccable.md`](./.impeccable.md). In short: dark theme, amber means Java and cyan means Go (never swap them), and colours come from the tokens in `src/app/globals.css`. Check both desktop and mobile after layout changes, and keep interactions keyboard-accessible.
+
+## SEO
+
+- Site-wide metadata: `src/app/layout.tsx`; per-section metadata and structured data: `src/app/sections/[id]/page.tsx`.
+- Open Graph images are generated per section at build time (`src/app/sections/[id]/opengraph-image.tsx`).
+- Changing a section `id` changes its URL. Avoid it; if you must, update any inbound links.

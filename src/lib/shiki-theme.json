@@ -1,5 +1,5 @@
 {
-  "name": "go2java-dark",
+  "name": "java2go-dark",
   "type": "dark",
   "colors": {
     "editor.background": "#0d0d18",
@@ -8,8 +8,14 @@
   "tokenColors": [
     {
       "name": "Comments",
-      "scope": ["comment", "punctuation.definition.comment"],
-      "settings": { "foreground": "#4a4a6a", "fontStyle": "italic" }
+      "scope": [
+        "comment",
+        "punctuation.definition.comment"
+      ],
+      "settings": {
+        "foreground": "#7d7da3",
+        "fontStyle": "italic"
+      }
     },
     {
       "name": "Keywords",
@@ -51,7 +57,9 @@
         "storage.type.java",
         "storage.modifier.java"
       ],
-      "settings": { "foreground": "#7c9fff" }
+      "settings": {
+        "foreground": "#7c9fff"
+      }
     },
     {
       "name": "Types & Classes",
@@ -71,7 +79,9 @@
         "storage.type.primitive.java",
         "storage.type.object.array.java"
       ],
-      "settings": { "foreground": "#4ec9b0" }
+      "settings": {
+        "foreground": "#4ec9b0"
+      }
     },
     {
       "name": "Functions & Methods",
@@ -82,7 +92,9 @@
         "entity.name.function.go",
         "entity.name.function.java"
       ],
-      "settings": { "foreground": "#dcdcaa" }
+      "settings": {
+        "foreground": "#dcdcaa"
+      }
     },
     {
       "name": "Strings",
@@ -94,12 +106,20 @@
         "string.quoted.single",
         "string.quoted.backtick"
       ],
-      "settings": { "foreground": "#ce9178" }
+      "settings": {
+        "foreground": "#ce9178"
+      }
     },
     {
       "name": "Numbers",
-      "scope": ["constant.numeric", "constant.language", "constant.character"],
-      "settings": { "foreground": "#b5cea8" }
+      "scope": [
+        "constant.numeric",
+        "constant.language",
+        "constant.character"
+      ],
+      "settings": {
+        "foreground": "#b5cea8"
+      }
     },
     {
       "name": "Boolean & nil/null",
@@ -108,27 +128,50 @@
         "constant.language.null",
         "constant.language.nil"
       ],
-      "settings": { "foreground": "#569cd6" }
+      "settings": {
+        "foreground": "#569cd6"
+      }
     },
     {
       "name": "Variables",
-      "scope": ["variable", "variable.other", "variable.parameter"],
-      "settings": { "foreground": "#e2e2f0" }
+      "scope": [
+        "variable",
+        "variable.other",
+        "variable.parameter"
+      ],
+      "settings": {
+        "foreground": "#e2e2f0"
+      }
     },
     {
       "name": "Operators",
-      "scope": ["keyword.operator", "punctuation.separator"],
-      "settings": { "foreground": "#d4d4d4" }
+      "scope": [
+        "keyword.operator",
+        "punctuation.separator"
+      ],
+      "settings": {
+        "foreground": "#d4d4d4"
+      }
     },
     {
       "name": "Annotations/Decorators",
-      "scope": ["meta.decorator", "punctuation.decorator"],
-      "settings": { "foreground": "#c07ed4" }
+      "scope": [
+        "meta.decorator",
+        "punctuation.decorator"
+      ],
+      "settings": {
+        "foreground": "#c07ed4"
+      }
     },
     {
       "name": "Package/Import names",
-      "scope": ["entity.name.namespace", "entity.name.module"],
-      "settings": { "foreground": "#4ec9b0" }
+      "scope": [
+        "entity.name.namespace",
+        "entity.name.module"
+      ],
+      "settings": {
+        "foreground": "#4ec9b0"
+      }
     }
   ]
 }

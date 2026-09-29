@@ -1,36 +1,53 @@
 {
   "name": "java2go",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
+  "description": "A Java-to-Go guide: side-by-side examples and mental-model shifts for Java developers learning Go.",
+  "license": "GPL-3.0-only",
+  "author": "Md Hishaam Akhtar",
+  "homepage": "https://java2go.hishaam.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mdhishaamakhtar/java2go.git"
+  },
+  "packageManager": "bun@1.3.14",
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint --fix",
-    "format": "prettier --write ."
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "bun run typecheck && bun run lint && bun run format:check"
   },
   "dependencies": {
-    "@fontsource/barlow": "^5.2.8",
-    "@fontsource/fira-code": "^5.2.7",
-    "next": "^16.1.6",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "shiki": "^1.0.0"
+    "@fontsource/barlow": "^5.3.0",
+    "@fontsource/fira-code": "^5.3.0",
+    "next": "^16.3.7",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "server-only": "^0.0.1",
+    "shiki": "^4.4.3"
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
-    "autoprefixer": "^10.0.1",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^24",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "babel-plugin-react-compiler": "^1.0.0",
-    "eslint": "^9.39.3",
-    "eslint-config-next": "^16.1.6",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.7",
     "eslint-config-prettier": "^10.1.8",
-    "postcss": "^8",
-    "prettier": "^3.8.1",
-    "prettier-plugin-tailwindcss": "^0.7.2",
-    "tailwindcss": "^3.3.0",
-    "typescript": "^5",
-    "typescript-language-server": "^5.1.3"
+    "postcss": "^8.5.28",
+    "prettier": "^3.9.9",
+    "prettier-plugin-tailwindcss": "^0.8.1",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~6.0.3",
+    "typescript-language-server": "^6.0.1"
   }
 }

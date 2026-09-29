@@ -1,165 +1,101 @@
-import React from 'react';
 import type { Block } from '@/types/section';
-import { highlight } from '@/lib/highlight';
-import { Note, Prose, H, H2, Tag, Callout, WhyBox } from './ui';
+import { highlight, normalizeCode } from '@/lib/highlight';
+import { getHeadings } from '@/lib/slug';
 import CodeBlock from './CodeBlock';
 import Compare from './Compare';
-import { LanguageLabel } from './BrandMarks';
+import { BulletList, Callout, DataTable, Heading, Note, Prose, Subheading } from './ui';
 
-// Lightweight rich-text parser for section copy.
-function parseRichText(text: string): React.ReactNode[] {
-  const tokens = text.split(/(`[^`]+`|\*\*[^*]+\*\*|\n\n|\n)/g).filter(Boolean);
-  return tokens.map((token, i) => {
-    if (token === '\n\n') {
-      return (
-        <React.Fragment key={i}>
-          <br />
-          <br />
-        </React.Fragment>
-      );
-    }
-    if (token === '\n') {
-      return <br key={i} />;
-    }
-    if (token.startsWith('`') && token.endsWith('`')) {
-      return <Tag key={i}>{token.slice(1, -1)}</Tag>;
-    }
-    if (token.startsWith('**') && token.endsWith('**')) {
-      return (
-        <strong key={i} style={{ color: 'var(--text-primary)', fontWeight: 700 }}>
-          {token.slice(2, -2)}
-        </strong>
-      );
-    }
-    return token;
-  });
+type Highlighted = { java: string; go: string } | { code: string } | null;
+
+async function highlightBlock(block: Block): Promise<Highlighted> {
+  if (block.type === 'compare') {
+    const [java, go] = await Promise.all([
+      highlight(block.java, block.javaLang ?? 'java'),
+      highlight(block.go, block.goLang ?? 'go'),
+    ]);
+    return { java, go };
+  }
+  if (block.type === 'codeblock') {
+    return { code: await highlight(block.code, block.lang) };
+  }
+  return null;
 }
 
-interface RenderedBlock {
-  block: Block;
-  javaHtml?: string;
-  goHtml?: string;
-  codeHtml?: string;
-}
+/** Server component: highlights every code block at build time, then renders. */
+export default async function SectionRenderer({ blocks }: { blocks: Block[] }) {
+  const highlighted = await Promise.all(blocks.map(highlightBlock));
+  const headings = getHeadings(blocks);
+  let headingIndex = 0;
 
-interface SectionRendererProps {
-  renderedBlocks: RenderedBlock[];
-}
-
-export default function SectionRenderer({ renderedBlocks }: SectionRendererProps) {
   return (
-    <div>
-      {renderedBlocks.map((rb, i) => {
-        const block = rb.block;
+    <div className="min-w-0">
+      {blocks.map((block, i) => {
+        const html = highlighted[i];
 
         switch (block.type) {
           case 'prose':
-            return <Prose key={i}>{parseRichText(block.text)}</Prose>;
+            return <Prose key={i} text={block.text} />;
 
           case 'heading':
-            return <H key={i}>{block.text}</H>;
+            return <Heading key={i} id={headings[headingIndex++].id} text={block.text} />;
 
           case 'subheading':
-            return <H2 key={i}>{block.text}</H2>;
+            return <Subheading key={i} id={headings[headingIndex++].id} text={block.text} />;
+
+          case 'list':
+            return <BulletList key={i} items={block.items} ordered={block.ordered} />;
 
           case 'note':
-            return (
-              <Note key={i} type={block.noteType}>
-                {parseRichText(block.text)}
-              </Note>
-            );
-
-          case 'callout':
-            return (
-              <Callout key={i} title={block.title} color={block.color}>
-                {parseRichText(block.text)}
-              </Callout>
-            );
+            return <Note key={i} type={block.noteType} text={block.text} />;
 
           case 'why':
-            return <WhyBox key={i}>{parseRichText(block.text)}</WhyBox>;
+            return <Note key={i} type="why" label="Why Go does this" text={block.text} />;
+
+          case 'callout':
+            return <Callout key={i} title={block.title} text={block.text} tone={block.tone} />;
+
+          case 'table':
+            return <DataTable key={i} rows={block.rows} head={block.head} />;
 
           case 'compare':
+            if (!html || !('java' in html)) return null;
             return (
               <Compare
                 key={i}
-                javaHtml={rb.javaHtml!}
-                goHtml={rb.goHtml!}
-                javaRaw={block.java}
-                goRaw={block.go}
-                javaLabel={block.javaLabel}
-                goLabel={block.goLabel}
+                java={{
+                  html: html.java,
+                  code: normalizeCode(block.java),
+                  lang: block.javaLang ?? 'java',
+                  label: block.javaLabel,
+                }}
+                go={{
+                  html: html.go,
+                  code: normalizeCode(block.go),
+                  lang: block.goLang ?? 'go',
+                  label: block.goLabel,
+                }}
               />
             );
 
           case 'codeblock':
+            if (!html || !('code' in html)) return null;
             return (
-              <div key={i} className="my-3.5">
+              <div key={i} className="my-6">
                 <CodeBlock
-                  highlightedHtml={rb.codeHtml!}
+                  html={html.code}
+                  code={normalizeCode(block.code)}
                   lang={block.lang}
                   label={block.label}
-                  rawCode={block.code}
                 />
               </div>
             );
 
-          case 'table':
-            return (
-              <div key={i} className="my-4 grid grid-cols-1 gap-3.5 md:grid-cols-2">
-                {block.rows.map(([java, go], j) => (
-                  <div
-                    key={j}
-                    className="grid gap-2 rounded-md"
-                    style={{
-                      background: 'var(--bg-panel)',
-                      padding: '14px 16px',
-                      border: '1px solid var(--border-panel)',
-                    }}
-                  >
-                    <LanguageLabel
-                      language="java"
-                      size={13}
-                      className="text-[0.9375rem] leading-relaxed"
-                    >
-                      {java}
-                    </LanguageLabel>
-                    <LanguageLabel
-                      language="go"
-                      size={13}
-                      className="text-[0.9375rem] leading-relaxed"
-                    >
-                      {go}
-                    </LanguageLabel>
-                  </div>
-                ))}
-              </div>
-            );
-
-          default:
-            return null;
+          default: {
+            const exhaustive: never = block;
+            return exhaustive;
+          }
         }
       })}
     </div>
   );
-}
-
-// Server-side function to pre-render all code blocks
-export async function renderBlocks(blocks: Block[]): Promise<RenderedBlock[]> {
-  const results: RenderedBlock[] = [];
-  for (const block of blocks) {
-    if (block.type === 'compare') {
-      const [javaHtml, goHtml] = await Promise.all([
-        highlight(block.java, 'java'),
-        highlight(block.go, 'go'),
-      ]);
-      results.push({ block, javaHtml, goHtml });
-    } else if (block.type === 'codeblock') {
-      const codeHtml = await highlight(block.code, block.lang);
-      results.push({ block, codeHtml });
-    } else {
-      results.push({ block });
-    }
-  }
-  return results;
 }

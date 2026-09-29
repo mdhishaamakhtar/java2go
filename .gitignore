@@ -40,4 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-.DS_Store
+# local Claude Code settings
+.claude/settings.local.json
+.claude/launch.json

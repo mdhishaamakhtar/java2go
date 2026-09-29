@@ -1,45 +1,39 @@
+import type { CSSProperties } from 'react';
+import type { CodeLang } from '@/types/section';
 import CodeBlock from './CodeBlock';
-import { LanguageLabel } from './BrandMarks';
 
-interface CompareProps {
-  javaHtml: string;
-  goHtml: string;
-  javaRaw: string;
-  goRaw: string;
-  javaLabel?: string;
-  goLabel?: string;
+interface Side {
+  html: string;
+  code: string;
+  lang: CodeLang;
+  label?: string;
 }
 
-export default function Compare({
-  javaHtml,
-  goHtml,
-  javaRaw,
-  goRaw,
-  javaLabel,
-  goLabel,
-}: CompareProps) {
+/**
+ * Java on the left, Go on the right. The pair goes side by side only when the
+ * content column is wide enough for both (container query), so it adapts to
+ * the collapsible sidebar as well as the viewport.
+ */
+export default function Compare({ java, go }: { java: Side; go: Side }) {
   return (
-    <div className="my-3.5">
-      <div className="grid w-full grid-cols-1 gap-2.5 md:grid-cols-2">
+    <div className="@container my-6">
+      <div
+        className="grid grid-cols-1 gap-3 @4xl:grid-cols-2"
+        style={{ '--code-font-size': '0.8125rem' } as CSSProperties}
+      >
         <CodeBlock
-          highlightedHtml={javaHtml}
-          lang="java"
-          label={
-            <LanguageLabel language="java" size={13}>
-              {javaLabel || 'Java'}
-            </LanguageLabel>
-          }
-          rawCode={javaRaw}
+          html={java.html}
+          code={java.code}
+          lang={java.lang}
+          label={java.label || 'Java'}
+          side="java"
         />
         <CodeBlock
-          highlightedHtml={goHtml}
-          lang="go"
-          label={
-            <LanguageLabel language="go" size={13}>
-              {goLabel || 'Go'}
-            </LanguageLabel>
-          }
-          rawCode={goRaw}
+          html={go.html}
+          code={go.code}
+          lang={go.lang}
+          label={go.label || 'Go'}
+          side="go"
         />
       </div>
     </div>

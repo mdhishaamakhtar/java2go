@@ -1,54 +1,52 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+/* Sidebar collapse state lives on <html data-sidebar="collapsed"> so it is
+   applied before first paint (see the inline script in layout.tsx). */
+@custom-variant sidebar-collapsed (&:where([data-sidebar='collapsed'] .app-sidebar, [data-sidebar='collapsed'] .app-sidebar *));
 
 :root {
+  color-scheme: dark;
+
+  /* Motion */
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
-  --drawer-enter-duration: 280ms;
-  --drawer-exit-duration: 210ms;
+  --duration-enter: 280ms;
+  --duration-exit: 200ms;
 
-  /* Type scale */
-  --text-caption: 0.875rem;
-  --text-label: 0.9375rem;
-  --text-body: 1.0625rem;
-  --text-body-lg: 1.125rem;
-  --text-subheading: 1.25rem;
-  --text-heading: 1.625rem;
-  --text-display: clamp(2.25rem, 5vw, 3.5rem);
+  /* Layout */
+  --sidebar-width: 18rem;
+  --sidebar-collapsed-width: 4.5rem;
+  --mobile-header-height: 3.75rem;
 
   /* Backgrounds */
   --bg-base: #080812;
   --bg-surface: #0d0d18;
   --bg-elevated: #13131f;
-  --bg-java: #0e0e06;
-  --bg-java-header: #18180a;
+  --bg-panel: #0a0a16;
+  --bg-hover: #11111d;
 
   /* Borders */
   --border-dim: #16162a;
   --border-subtle: #2a2a3a;
-  --border-java: #3a3a1a;
   --border-panel: #24243a;
 
   /* Text */
   --text-primary: #e2e2f0;
+  --text-copy: #a4a4bf;
   --text-secondary: #8b8ba7;
   --text-muted: #7a7aa0;
   --text-dim: #3a3a5c;
 
-  /* Accent */
+  /* Accents: amber = Java, cyan = Go, blue = neutral UI */
   --accent-blue: #4a7aff;
+  --accent-link: #7c9fff;
   --accent-cyan: #4ec9b0;
   --accent-java: #c9b85a;
 
-  /* Syntax tokens */
+  /* Syntax */
   --syn-keyword: #7c9fff;
-  --syn-type: #4ec9b0;
-  --syn-string: #ce9178;
-  --syn-number: #b5cea8;
-  --syn-comment: #4a4a6a;
 
-  /* Note box colors */
+  /* Note boxes */
   --note-info-bg: #0d1f2d;
   --note-info-border: #1e4a6a;
   --note-info-text: #7eb8d4;
@@ -67,81 +65,247 @@
   --note-why-bg: #0d1a1a;
   --note-why-border: #1e4a4a;
   --note-why-text: #7ed4c0;
-  --bg-panel: #0a0a16;
 }
 
-html,
-body {
-  background-color: var(--bg-base);
-  color: var(--text-primary);
-  font-family: 'Barlow', 'Segoe UI', system-ui, sans-serif;
-  font-size: 16px;
-  font-kerning: normal;
+@theme inline {
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-black: #000;
+
+  --color-canvas: var(--bg-base);
+  --color-surface: var(--bg-surface);
+  --color-elevated: var(--bg-elevated);
+  --color-panel: var(--bg-panel);
+  --color-hover: var(--bg-hover);
+
+  --color-line-dim: var(--border-dim);
+  --color-line: var(--border-subtle);
+  --color-line-panel: var(--border-panel);
+
+  --color-primary: var(--text-primary);
+  --color-copy: var(--text-copy);
+  --color-secondary: var(--text-secondary);
+  --color-muted: var(--text-muted);
+  --color-dim: var(--text-dim);
+
+  --color-accent: var(--accent-blue);
+  --color-link: var(--accent-link);
+  --color-go: var(--accent-cyan);
+  --color-java: var(--accent-java);
+
+  --font-sans: 'Barlow', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'Fira Code', 'JetBrains Mono', 'Cascadia Code', ui-monospace, monospace;
+
+  --ease-out-quart: var(--ease-out-quart);
+  --ease-out-quint: var(--ease-out-quint);
 }
 
-a:focus-visible,
-button:focus-visible {
-  outline: 2px solid var(--accent-cyan);
-  outline-offset: 2px;
+@theme {
+  /* Type scale */
+  --text-caption: 0.875rem;
+  --text-label: 0.9375rem;
+  --text-body: 1.0625rem;
+  --text-body-lg: 1.1875rem;
+  --text-subheading: 1.25rem;
+  --text-heading: 1.625rem;
+  --text-display: clamp(2.25rem, 5vw, 3.5rem);
+
+  --container-measure: 68ch;
+
+  --breakpoint-3xl: 100rem;
 }
 
-/* Shiki code block overrides */
+@layer base {
+  html {
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    font-kerning: normal;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    scrollbar-color: var(--border-subtle) transparent;
+    scroll-padding-top: calc(var(--mobile-header-height) + 1rem);
+  }
+
+  @media (min-width: 64rem) {
+    html {
+      scroll-padding-top: 2rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    min-height: 100dvh;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--accent-cyan) 32%, transparent);
+    color: var(--text-primary);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent-cyan);
+    outline-offset: 2px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p,
+  li {
+    text-wrap: pretty;
+  }
+}
+
+/* ─── Code blocks (Shiki output) ────────────────────────────────────────── */
+
 .shiki {
   margin: 0;
-  padding: 14px 18px;
+  padding: 0.875rem 1.125rem;
   overflow-x: auto;
-  font-size: 0.875rem;
-  line-height: 1.8;
-  font-family: 'Fira Code', 'JetBrains Mono', 'Cascadia Code', monospace;
+  font-family: var(--font-mono);
+  font-size: var(--code-font-size, 0.875rem);
+  line-height: 1.75;
+  tab-size: 4;
+  /* Ligatures turn `!=` into ≠ and `<-` into an arrow. In a guide that
+     teaches syntax, readers need to see the characters they will type. */
+  font-variant-ligatures: none;
+  font-feature-settings:
+    'liga' 0,
+    'calt' 0;
   background: transparent !important;
+  scrollbar-width: thin;
 }
 
 .shiki code {
+  display: block;
+  width: max-content;
+  min-width: 100%;
   background: transparent !important;
 }
 
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: var(--bg-base);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--border-subtle);
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+/* ─── Dialogs (mobile drawer + search) ──────────────────────────────────── */
+
+dialog.drawer,
+dialog.palette {
+  max-width: none;
+  max-height: none;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  background: transparent;
 }
 
-.drawer-backdrop {
-  opacity: 0;
-  transition: opacity var(--drawer-enter-duration) var(--ease-out-quart);
-}
-
-.drawer-backdrop[data-state='open'] {
-  opacity: 1;
-}
-
-.drawer-panel {
-  transform: translateX(-24px);
+dialog.drawer::backdrop,
+dialog.palette::backdrop {
+  background: rgb(0 0 0 / 0.6);
   opacity: 0;
   transition:
-    transform var(--drawer-enter-duration) var(--ease-out-quint),
-    opacity var(--drawer-enter-duration) var(--ease-out-quart);
-  will-change: transform, opacity;
+    opacity var(--duration-exit) var(--ease-out-quart),
+    overlay var(--duration-exit) allow-discrete,
+    display var(--duration-exit) allow-discrete;
 }
 
-.drawer-panel[data-state='open'] {
-  transform: translateX(0);
+dialog.drawer[open]::backdrop,
+dialog.palette[open]::backdrop {
   opacity: 1;
+  transition-duration: var(--duration-enter);
+}
+
+@starting-style {
+  dialog.drawer[open]::backdrop,
+  dialog.palette[open]::backdrop {
+    opacity: 0;
+  }
+}
+
+dialog.drawer {
+  inset: 0 auto 0 0;
+  width: min(20rem, 88vw);
+  height: 100dvh;
+  margin: 0;
+  transform: translateX(-1.5rem);
+  opacity: 0;
+  transition:
+    transform var(--duration-exit) var(--ease-out-quint),
+    opacity var(--duration-exit) var(--ease-out-quart),
+    overlay var(--duration-exit) allow-discrete,
+    display var(--duration-exit) allow-discrete;
+}
+
+dialog.drawer[open] {
+  transform: none;
+  opacity: 1;
+  transition-duration: var(--duration-enter);
+}
+
+@starting-style {
+  dialog.drawer[open] {
+    transform: translateX(-1.5rem);
+    opacity: 0;
+  }
+}
+
+dialog.palette {
+  margin: 12vh auto auto;
+  width: min(40rem, calc(100vw - 2rem));
+  opacity: 0;
+  transform: translateY(-0.5rem);
+  transition:
+    transform var(--duration-exit) var(--ease-out-quint),
+    opacity var(--duration-exit) var(--ease-out-quart),
+    overlay var(--duration-exit) allow-discrete,
+    display var(--duration-exit) allow-discrete;
+}
+
+dialog.palette[open] {
+  opacity: 1;
+  transform: none;
+  transition-duration: var(--duration-enter);
+}
+
+@starting-style {
+  dialog.palette[open] {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+}
+
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+
+/* ─── Sidebar width ─────────────────────────────────────────────────────── */
+
+/* Collapsing is a layout change, so it is instant rather than animated. */
+.app-sidebar {
+  width: var(--sidebar-width);
+}
+
+[data-sidebar='collapsed'] .app-sidebar {
+  width: var(--sidebar-collapsed-width);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .drawer-backdrop,
-  .drawer-panel {
-    transition: none !important;
+  *,
+  *::before,
+  *::after,
+  ::backdrop {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }

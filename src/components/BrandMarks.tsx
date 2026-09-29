@@ -1,15 +1,16 @@
-import React from 'react';
+import type { ReactNode } from 'react';
 
 interface MarkProps {
   size?: number;
   className?: string;
-  title?: string;
 }
 
-export function JavaMark({ size = 16, className, title = 'Java' }: MarkProps) {
+/** Amber coffee cup. Decorative: the adjacent text always names the language. */
+export function JavaMark({ size = 16, className }: MarkProps) {
   return (
     <svg
       aria-hidden="true"
+      focusable="false"
       className={className}
       width={size}
       height={size}
@@ -18,7 +19,6 @@ export function JavaMark({ size = 16, className, title = 'Java' }: MarkProps) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <title>{title}</title>
       <path
         d="M8.5 9.5C8.5 8.95 8.95 8.5 9.5 8.5H15.6C16.15 8.5 16.6 8.95 16.6 9.5V14.2C16.6 15.19 15.79 16 14.8 16H9.5C8.95 16 8.5 15.55 8.5 15V9.5Z"
         fill="var(--accent-java)"
@@ -51,10 +51,12 @@ export function JavaMark({ size = 16, className, title = 'Java' }: MarkProps) {
   );
 }
 
-export function GoMark({ size = 16, className, title = 'Go' }: MarkProps) {
+/** Cyan gopher head. Decorative: the adjacent text always names the language. */
+export function GoMark({ size = 16, className }: MarkProps) {
   return (
     <svg
       aria-hidden="true"
+      focusable="false"
       className={className}
       width={size}
       height={size}
@@ -63,7 +65,6 @@ export function GoMark({ size = 16, className, title = 'Go' }: MarkProps) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <title>{title}</title>
       <circle cx="8.35" cy="7.15" r="1.85" fill="var(--accent-cyan)" />
       <circle cx="16.1" cy="7.15" r="1.85" fill="var(--accent-cyan)" />
       <ellipse cx="12.2" cy="12.7" rx="7.2" ry="5.7" fill="var(--accent-cyan)" />
@@ -81,46 +82,47 @@ export function GoMark({ size = 16, className, title = 'Go' }: MarkProps) {
   );
 }
 
-export function JavaToGoLockup({ className }: { className?: string }) {
+/** Java mark → Go mark. The journey the guide is about, in one glyph. */
+export function JavaToGoLockup({ size = 22, className }: { size?: number; className?: string }) {
   return (
     <span className={className} aria-hidden="true">
-      <JavaMark size={22} className="shrink-0" />
-      <span
-        className="text-xs"
-        style={{ color: 'var(--text-muted)', letterSpacing: 1.5, transform: 'translateY(-0.5px)' }}
+      <JavaMark size={size} />
+      <svg
+        width={size * 0.7}
+        height={size * 0.7}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="var(--text-muted)"
+        strokeWidth={1.75}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        style={{ display: 'block', flex: 'none' }}
       >
-        →
-      </span>
-      <GoMark size={22} className="shrink-0" />
+        <path d="M5 12h14" />
+        <path d="m13 6 6 6-6 6" />
+      </svg>
+      <GoMark size={size} />
     </span>
   );
 }
 
 interface LanguageLabelProps {
   language: 'java' | 'go';
-  children: React.ReactNode;
+  children: ReactNode;
   size?: number;
   className?: string;
 }
 
 export function LanguageLabel({ language, children, size = 14, className }: LanguageLabelProps) {
   const Mark = language === 'java' ? JavaMark : GoMark;
-  const color = language === 'java' ? 'var(--accent-java)' : 'var(--note-info-text)';
-
   return (
     <span
-      className={className}
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: 8,
-        color,
-        minWidth: 0,
-        verticalAlign: 'middle',
-      }}
+      className={`inline-flex min-w-0 items-center gap-2 align-middle ${
+        language === 'java' ? 'text-java' : 'text-go'
+      } ${className ?? ''}`}
     >
       <Mark size={size} className="shrink-0" />
-      <span style={{ minWidth: 0, flex: 1 }}>{children}</span>
+      <span className="min-w-0">{children}</span>
     </span>
   );
 }
