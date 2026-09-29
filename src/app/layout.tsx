@@ -1,67 +1,86 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
+import type { ReactNode } from 'react';
 import '@fontsource/barlow/400.css';
+import '@fontsource/barlow/500.css';
 import '@fontsource/barlow/600.css';
 import '@fontsource/barlow/700.css';
 import '@fontsource/fira-code/400.css';
 import '@fontsource/fira-code/500.css';
 import './globals.css';
-import DesktopSidebar from '@/components/DesktopSidebar';
-import MobileNav from '@/components/MobileNav';
-import sections from '@/data/sections';
+import DesktopSidebar from '@/components/nav/DesktopSidebar';
+import MobileNav from '@/components/nav/MobileNav';
+import SearchProvider from '@/components/search/SearchProvider';
+import SiteFooter from '@/components/SiteFooter';
+import { getSectionLinks, parts } from '@/data/sections';
+import { sidebarInitScript } from '@/lib/sidebar';
 import { getSiteUrlObject, siteConfig } from '@/lib/site';
 
 export const metadata: Metadata = {
   metadataBase: getSiteUrlObject(),
   title: {
     default: siteConfig.title,
-    template: '%s | Java2Go',
+    template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
+  applicationName: siteConfig.name,
+  authors: [{ name: siteConfig.author.name, url: siteConfig.author.url }],
+  creator: siteConfig.author.name,
   keywords: [...siteConfig.keywords],
   alternates: {
     canonical: '/',
   },
   openGraph: {
+    type: 'website',
+    siteName: siteConfig.name,
+    locale: 'en_US',
+    url: '/',
     title: siteConfig.title,
     description: siteConfig.description,
-    type: 'website',
-    url: '/',
-    images: [
-      {
-        url: siteConfig.ogImagePath,
-        width: 1200,
-        height: 630,
-        alt: siteConfig.ogImageAlt,
-      },
-    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: siteConfig.title,
     description: siteConfig.description,
-    images: [siteConfig.twitterImagePath],
-    creator: siteConfig.creator,
+  },
+  formatDetection: {
+    telephone: false,
+    email: false,
+    address: false,
   },
 };
 
-const navSections = sections.map(({ id, title, label }) => ({ id, title, label }));
+export const viewport: Viewport = {
+  themeColor: '#080812',
+  colorScheme: 'dark',
+};
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+const sectionLinks = getSectionLinks();
+
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
-        <div className="flex min-h-screen" style={{ background: 'var(--bg-base)' }}>
-          <DesktopSidebar sections={navSections} />
-
-          {/* Main content area */}
-          <div className="flex min-w-0 flex-1 flex-col">
-            {/* Mobile nav (hidden on lg) */}
-            <MobileNav sections={navSections} />
-
-            {/* Page content */}
-            <main className="flex-1">{children}</main>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: sidebarInitScript }} />
+      </head>
+      <body className="bg-canvas text-primary">
+        <a
+          href="#main-content"
+          className="fixed top-3 left-3 z-50 -translate-y-20 rounded-md bg-elevated px-4 py-2.5 text-label font-medium text-primary shadow-[0_8px_24px_-8px_rgb(0_0_0/0.8)] transition-transform focus-visible:translate-y-0"
+        >
+          Skip to content
+        </a>
+        <SearchProvider>
+          <div className="flex min-h-dvh">
+            <DesktopSidebar parts={parts} sections={sectionLinks} />
+            <div className="flex min-w-0 flex-1 flex-col">
+              <MobileNav parts={parts} sections={sectionLinks} />
+              <main id="main-content" tabIndex={-1} className="flex-1 outline-none">
+                {children}
+              </main>
+              <SiteFooter />
+            </div>
           </div>
-        </div>
+        </SearchProvider>
       </body>
     </html>
   );

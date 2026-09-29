@@ -3,4 +3,5 @@ node_modules
 out
 *.lock
 package-lock.json
+public/og-image.svg
 src/lib/shiki-theme.json

@@ -1,85 +1,56 @@
-'use client';
+import type { CodeLang } from '@/types/section';
+import { GoMark, JavaMark, LanguageLabel } from './BrandMarks';
+import CopyButton from './CopyButton';
 
-import { useState } from 'react';
-import type { ReactNode } from 'react';
-import { LanguageLabel } from './BrandMarks';
+const LANG_NAMES: Record<CodeLang, string> = {
+  go: 'Go',
+  java: 'Java',
+  bash: 'Shell',
+  xml: 'XML',
+  json: 'JSON',
+  yaml: 'YAML',
+  sql: 'SQL',
+  dockerfile: 'Dockerfile',
+  properties: 'Properties',
+  text: 'Text',
+};
 
 interface CodeBlockProps {
-  highlightedHtml: string;
-  lang: 'go' | 'java';
-  label?: ReactNode;
-  rawCode: string;
+  /** Pre-highlighted HTML from `highlight()`. */
+  html: string;
+  /** The exact source shown, used for copy-to-clipboard. */
+  code: string;
+  lang: CodeLang;
+  label?: string;
+  /** Which side of the Java/Go story this snippet belongs to, if any. */
+  side?: 'java' | 'go';
 }
 
-export default function CodeBlock({ highlightedHtml, lang, label, rawCode }: CodeBlockProps) {
-  const [copied, setCopied] = useState(false);
-
-  const copy = () => {
-    navigator.clipboard.writeText(rawCode);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1600);
-  };
-
-  const headerBg = 'var(--bg-elevated)';
-  const bodyBg = 'var(--bg-surface)';
-  const borderC = 'var(--border-subtle)';
-  const labelC = 'var(--text-muted)';
-  const btnC = copied ? 'var(--accent-cyan)' : labelC;
-  const fallbackLabel =
-    lang === 'java' ? (
-      <LanguageLabel language="java" size={13}>
-        java
-      </LanguageLabel>
-    ) : (
-      <LanguageLabel language="go" size={13}>
-        go
-      </LanguageLabel>
-    );
+export default function CodeBlock({ html, code, lang, label, side }: CodeBlockProps) {
+  const title = label || LANG_NAMES[lang];
+  const brand = side ?? (lang === 'go' || lang === 'java' ? lang : undefined);
 
   return (
-    <div
-      className="min-w-0 flex-1 overflow-hidden rounded-lg"
-      style={{ border: `1px solid ${borderC}` }}
-    >
-      {/* Header */}
-      <div
-        className="flex items-center justify-between px-3.5"
-        style={{ background: headerBg, borderBottom: `1px solid ${borderC}`, padding: '10px 14px' }}
-      >
-        <span
-          className="min-w-0"
-          style={{
-            color: labelC,
-            fontSize: '0.8125rem',
-            fontFamily: 'monospace',
-            letterSpacing: 0.8,
-          }}
-        >
-          {label || fallbackLabel}
+    <figure className="m-0 flex min-w-0 flex-col overflow-hidden rounded-lg border border-line bg-surface">
+      <figcaption className="flex min-h-11 items-center justify-between gap-3 border-b border-line bg-elevated py-1.5 pr-1.5 pl-3.5">
+        <span className="min-w-0 text-caption leading-snug font-medium">
+          {side ? (
+            // In a Java/Go pair the label colour says which side is which
+            <LanguageLabel language={side} size={14}>
+              {title}
+            </LanguageLabel>
+          ) : brand ? (
+            <span className="inline-flex min-w-0 items-center gap-2 align-middle text-secondary">
+              {brand === 'go' ? <GoMark size={14} /> : <JavaMark size={14} />}
+              <span className="min-w-0">{title}</span>
+            </span>
+          ) : (
+            <span className="text-secondary">{title}</span>
+          )}
         </span>
-        <button
-          onClick={copy}
-          type="button"
-          className="inline-flex items-center justify-center rounded"
-          style={{
-            background: 'none',
-            border: `1px solid ${borderC}`,
-            borderRadius: 4,
-            color: btnC,
-            cursor: 'pointer',
-            fontSize: '0.75rem',
-            lineHeight: 1,
-            padding: '7px 10px',
-            fontFamily: 'monospace',
-            transition: 'color 0.2s',
-          }}
-        >
-          {copied ? 'copied' : 'copy'}
-        </button>
-      </div>
-
-      {/* Code */}
-      <div style={{ background: bodyBg }} dangerouslySetInnerHTML={{ __html: highlightedHtml }} />
-    </div>
+        <CopyButton text={code} label={title} />
+      </figcaption>
+      <div className="min-w-0 flex-1 [&_pre]:h-full" dangerouslySetInnerHTML={{ __html: html }} />
+    </figure>
   );
 }
