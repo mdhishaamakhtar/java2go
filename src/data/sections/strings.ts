@@ -48,6 +48,13 @@ s == "héllo" // true: == compares contents`,
       noteType: 'java',
       text: 'The Java habit `a == b` for strings is a bug; in Go it is correct. Strings are values compared by content, they can be `map` keys, and they work in `switch` statements. There is no `null` string: the zero value is `""`, so an empty check is just `s == ""`.',
     },
+    {
+      type: 'figure',
+      diagram: 'utf8-bytes-runes',
+      caption:
+        'A Go string is a sequence of UTF-8 bytes. `len` counts bytes and indexing returns a byte; `range` decodes one rune (code point) at a time and reports the byte offset where it starts.',
+      alt: 'The string héllo drawn twice. First as six byte cells, 104, 195, 169, 108, 108 and 111, at indexes 0 to 5, with é spanning bytes 1 and 2 and byte 1 (195) highlighted. Second as five rune boxes, h, é, l, l and o, at byte offsets 0, 1, 3, 4 and 5.',
+    },
     { type: 'heading', text: 'Everyday operations: the strings package' },
     {
       type: 'table',

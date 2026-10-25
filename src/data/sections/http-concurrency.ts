@@ -14,7 +14,7 @@ const section: SectionContent = {
       type: 'callout',
       title: 'Four concurrency models',
       tone: 'info',
-      text: '**Spring MVC on platform threads:** each request occupies a Tomcat worker thread (200 by default) until the response is written, including all the time spent waiting on I/O. Simple code; thread count caps concurrency.\n\n**Spring WebFlux (reactive):** a few Netty event-loop threads serve every request with non-blocking I/O. High concurrency, but every layer must return `Mono`/`Flux` and nothing may block.\n\n**Spring MVC on virtual threads (Java 21+):** set `spring.threads.virtual.enabled=true` and each request runs on a cheap virtual thread that unmounts while blocked. Blocking code, high concurrency.\n\n**Go `net/http`:** every connection is served by its own goroutine. Blocking calls park the goroutine and free the OS thread. Blocking code, high concurrency, and the only model the ecosystem has ever used.',
+      text: '**Spring MVC on platform threads:** each request occupies a Tomcat worker thread (200 by default) until the response is written, including all the time spent waiting on I/O. Simple code; thread count caps concurrency.\n\n**Spring WebFlux (reactive):** a few Netty event-loop threads serve every request with non-blocking I/O. High concurrency, but every layer must return `Mono`/`Flux` and nothing may block.\n\n**Spring MVC on virtual threads (Java 21+):** set `spring.threads.virtual.enabled=true` and each request runs on a cheap virtual thread that unmounts while blocked. Blocking code, high concurrency.\n\n**Go `net/http`:** every request is served by its own goroutine. Blocking calls park the goroutine and free the OS thread. Blocking code, high concurrency, and the only model the ecosystem has ever used.',
     },
     { type: 'heading', text: 'Spring MVC: a thread per request' },
     {
@@ -34,7 +34,7 @@ class MessageController {
     Message get(@PathVariable long id) {
         // On platform threads, this worker sits idle while the
         // database answers. With server.tomcat.threads.max=200,
-        // request 201 waits in the accept queue.
+        // request 201 waits in the worker executor's queue.
         return service.findById(id);
     }
 }`,
@@ -72,7 +72,8 @@ class MessageController {
     messages *message.Service
 }
 
-// net/http runs this in the goroutine serving the connection.
+// net/http runs this in a goroutine of its own: one per connection
+// on HTTP/1.x, one per request stream on HTTP/2.
 // While Find waits on Postgres, the goroutine is parked and its
 // OS thread runs other goroutines. No callbacks, no Mono.
 func (h *MessageHandler) Get(w http.ResponseWriter, r *http.Request) {
@@ -95,6 +96,13 @@ func main() {
       title: 'Why goroutines stay cheap: the M:N scheduler',
       tone: 'go',
       text: 'The runtime multiplexes many goroutines (G) onto a few OS threads (M) through `GOMAXPROCS` logical processors (P), by default one per available CPU core.\n\nWhen a goroutine waits on the network, it is parked and its thread picks up another runnable goroutine. The runtime’s network poller (epoll on Linux, kqueue on macOS) wakes it when data arrives. When a goroutine makes a blocking system call, the runtime hands its processor to another thread so the rest keep running.\n\nIdle goroutines cost only their stack, a few kilobytes. Tens of thousands of in-flight requests fit comfortably in memory.',
+    },
+    {
+      type: 'figure',
+      diagram: 'http-models',
+      caption:
+        "Java's three answers, and Go's one, to thousands of requests waiting on a database. Spring MVC on platform threads holds a worker thread for the whole wait. WebFlux keeps a few event-loop threads busy with callbacks, so nothing may block. Spring MVC on virtual threads and Go both park the waiting request and let the thread run another.",
+      alt: 'Four panels. Spring MVC on platform threads: three worker lanes, each running briefly, then waiting on the database with the thread held, then finishing. WebFlux: two event-loop lanes packed with short callbacks from many requests, every layer returning Mono or Flux. Spring MVC on virtual threads: many virtual threads, one per request, with two running on carrier threads and most of the rest parked. Go: the same picture with goroutines on OS threads.',
     },
     { type: 'heading', text: 'Comparing the models' },
     {
@@ -129,7 +137,7 @@ func main() {
         [
           'Caveats',
           'Tune pool sizes',
-          'Pinning, ThreadLocal cost, library readiness',
+          'Pinning in native calls, ThreadLocal cost, library readiness',
           'Bound fan-out yourself',
         ],
       ],

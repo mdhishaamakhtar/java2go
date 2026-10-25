@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { kicker, pageTitle, secondaryAction } from '@/components/actions';
 import { ArrowRightIcon } from '@/components/icons';
 import NotFoundSearch from '@/components/search/NotFoundSearch';
 import sections from '@/data/sections';
@@ -18,39 +19,34 @@ export default function NotFound() {
 
   return (
     <div className="mx-auto w-full max-w-[46rem] px-5 pt-16 pb-20 sm:px-8 lg:pt-24">
-      <p className="font-mono text-caption text-muted">404</p>
-      <h1 className="mt-2 text-[clamp(2rem,4.2vw,2.875rem)] leading-[1.08] font-bold tracking-[-0.02em] text-primary">
-        This page doesn’t exist
-      </h1>
-      <p className="mt-4 text-body-lg leading-[1.65] text-secondary">
+      <p className={kicker}>404</p>
+      <h1 className={`mt-3 ${pageTitle}`}>This page doesn’t exist</h1>
+      <p className="mt-5 text-body-lg leading-[1.6] text-ink-2">
         The link may be out of date, or the section may have moved. Search the guide, or pick up
         from one of the most-read sections.
       </p>
 
       <div className="mt-8 flex flex-wrap gap-3">
         <NotFoundSearch />
-        <Link
-          href="/"
-          className="inline-flex h-11 items-center rounded-lg border border-line px-5 text-label font-medium text-primary transition-colors hover:border-muted/60 hover:bg-surface"
-        >
+        <Link href="/" className={secondaryAction}>
           Back to the contents
         </Link>
       </div>
 
-      <ul className="mt-12 divide-y divide-line-dim border-y border-line-dim">
+      <ul className="mt-12 divide-y divide-rule border-y border-rule">
         {picks.map((section) => (
           <li key={section.id}>
             <Link
               href={`/sections/${section.id}`}
-              className="group flex items-center gap-3 py-3.5 text-body text-primary transition-colors hover:text-go"
+              className="group flex items-center gap-3 py-3.5 font-sans text-body font-semibold text-ink transition-colors hover:text-go"
             >
-              <span className="font-mono text-caption text-muted tabular-nums">
+              <span className="w-7 font-mono text-caption font-normal text-ink-3 tabular-nums">
                 {section.number}
               </span>
               <span className="flex-1">{section.label}</span>
               <ArrowRightIcon
                 size={16}
-                className="text-muted transition-transform group-hover:translate-x-0.5"
+                className="text-ink-3 transition-transform group-hover:translate-x-0.5"
               />
             </Link>
           </li>

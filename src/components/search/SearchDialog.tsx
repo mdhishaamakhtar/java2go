@@ -94,9 +94,9 @@ export default function SearchDialog({ index, onRetry, open, onClose }: SearchDi
         if (event.target === event.currentTarget) handleClose();
       }}
     >
-      <div className="overflow-hidden rounded-xl border border-line bg-surface shadow-[0_24px_64px_-16px_rgb(0_0_0/0.7)]">
-        <div className="flex items-center gap-3 border-b border-line px-4">
-          <SearchIcon size={18} className="shrink-0 text-muted" />
+      <div className="overflow-hidden rounded-lg border border-rule-strong bg-sunk font-sans shadow-[0_24px_64px_-16px_rgb(0_0_0/0.55)]">
+        <div className="flex items-center gap-3 border-b border-rule px-4">
+          <SearchIcon size={18} className="shrink-0 text-ink-3" />
           <input
             ref={inputRef}
             type="search"
@@ -115,12 +115,12 @@ export default function SearchDialog({ index, onRetry, open, onClose }: SearchDi
             aria-activedescendant={active >= 0 ? optionId(active) : undefined}
             autoComplete="off"
             spellCheck={false}
-            className="h-14 min-w-0 flex-1 bg-transparent text-body text-primary outline-none placeholder:text-muted [&::-webkit-search-cancel-button]:hidden"
+            className="h-14 min-w-0 flex-1 bg-transparent text-body text-ink outline-none placeholder:text-ink-3 [&::-webkit-search-cancel-button]:hidden"
           />
           <button
             type="button"
             onClick={handleClose}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted transition-colors hover:bg-elevated hover:text-primary"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-ink-3 transition-colors hover:bg-chip hover:text-ink"
             aria-label="Close search"
           >
             <CloseIcon size={18} />
@@ -148,10 +148,10 @@ export default function SearchDialog({ index, onRetry, open, onClose }: SearchDi
                 tabIndex={-1}
                 onClick={handleClose}
                 className={`flex items-center gap-3 rounded-md px-3 py-2.5 transition-colors ${
-                  i === active ? 'bg-elevated text-primary' : 'text-secondary'
+                  i === active ? 'bg-chip text-ink' : 'text-ink-2'
                 }`}
               >
-                <span className="w-6 shrink-0 text-center font-mono text-caption text-muted tabular-nums">
+                <span className="w-6 shrink-0 text-center font-mono text-caption text-ink-3 tabular-nums">
                   {entry.kind === 'section' ? (
                     entry.number
                   ) : (
@@ -160,13 +160,13 @@ export default function SearchDialog({ index, onRetry, open, onClose }: SearchDi
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-label font-medium">{entry.title}</span>
-                  <span className="block truncate text-caption text-muted">
+                  <span className="block truncate text-caption text-ink-3">
                     {entry.kind === 'heading'
                       ? `${entry.number} · ${entry.context}`
                       : entry.context}
                   </span>
                 </span>
-                {i === active && <ReturnIcon size={14} className="shrink-0 text-muted" />}
+                {i === active && <ReturnIcon size={14} className="shrink-0 text-ink-3" />}
               </Link>
             </li>
           ))}
@@ -176,21 +176,21 @@ export default function SearchDialog({ index, onRetry, open, onClose }: SearchDi
           <div className="space-y-2 p-3" role="status" aria-label="Loading search index">
             {[0, 1, 2, 3].map((i) => (
               <div key={i} className="flex items-center gap-3 px-2 py-1.5">
-                <div className="h-4 w-6 animate-pulse rounded bg-elevated" />
-                <div className="h-4 flex-1 animate-pulse rounded bg-elevated" />
+                <div className="h-4 w-6 animate-pulse rounded bg-chip" />
+                <div className="h-4 flex-1 animate-pulse rounded bg-chip" />
               </div>
             ))}
           </div>
         )}
 
         {index.status === 'error' && (
-          <div className="px-6 pt-4 pb-8 text-center text-label text-secondary" role="alert">
-            <WarningIcon size={20} className="mx-auto mb-2 text-[var(--note-warn-text)]" />
+          <div className="px-6 pt-4 pb-8 text-center text-label text-ink-2" role="alert">
+            <WarningIcon size={20} className="mx-auto mb-2 text-warn" />
             <p>Search could not be loaded. Check your connection and try again.</p>
             <button
               type="button"
               onClick={onRetry}
-              className="mt-3 rounded-md border border-line px-3 py-1.5 text-caption font-medium text-primary transition-colors hover:bg-elevated"
+              className="mt-3 rounded-md border border-rule-strong px-3 py-1.5 text-caption font-medium text-ink transition-colors hover:bg-chip"
             >
               Retry
             </button>
@@ -198,18 +198,18 @@ export default function SearchDialog({ index, onRetry, open, onClose }: SearchDi
         )}
 
         {index.status === 'ready' && results.length === 0 && (
-          <div className="px-6 pt-2 pb-8 text-center text-label text-secondary" role="status">
+          <div className="px-6 pt-2 pb-8 text-center text-label text-ink-2" role="status">
             <p>
-              No results for <span className="text-primary">“{query.trim()}”</span>.
+              No results for <span className="text-ink">“{query.trim()}”</span>.
             </p>
-            <p className="mt-1 text-caption text-muted">
+            <p className="mt-1 text-caption text-ink-3">
               Try a Go term like <em>channel</em>, <em>interface</em> or <em>defer</em>, or a Java
               one like <em>ExecutorService</em>.
             </p>
           </div>
         )}
 
-        <div className="flex items-center gap-4 border-t border-line px-4 py-2.5 text-caption text-muted max-sm:hidden">
+        <div className="flex items-center gap-4 border-t border-rule px-4 py-2.5 text-caption text-ink-3 max-sm:hidden">
           <span>
             <Kbd>↑</Kbd> <Kbd>↓</Kbd> to navigate
           </span>
@@ -227,7 +227,7 @@ export default function SearchDialog({ index, onRetry, open, onClose }: SearchDi
 
 function Kbd({ children }: { children: string }) {
   return (
-    <kbd className="inline-flex min-w-5 items-center justify-center rounded border border-line bg-elevated px-1 font-sans text-[0.75rem] text-secondary">
+    <kbd className="inline-flex min-w-5 items-center justify-center rounded border border-rule-strong bg-chip px-1 font-sans text-micro text-ink-2">
       {children}
     </kbd>
   );

@@ -61,7 +61,8 @@ func main() {
     slog.SetDefault(logger) // also redirects the old log package
 
     slog.Info("server starting", "addr", ":8080", "version", version)
-    // {"time":"…","level":"INFO","source":{…},"msg":"server starting","addr":":8080","version":"1.4.2"}
+    // {"time":"…","level":"INFO","source":{…},"msg":"server starting",
+    //  "addr":":8080","version":"1.4.2"}
 }`,
     },
     {
@@ -163,7 +164,8 @@ func (h ContextHandler) WithGroup(name string) slog.Handler {
       label: 'slog.LogValuer controls how a type is logged',
       code: `type Password string
 
-// Whenever a Password is logged, this value is used instead
+// When a Password is logged as an attribute value, this is used instead.
+// (A struct holding one needs its own LogValue, as User has below.)
 func (Password) LogValue() slog.Value {
     return slog.StringValue("REDACTED")
 }
@@ -178,6 +180,13 @@ func (u User) LogValue() slog.Value {
 
 slog.Info("signup", "user", user, "password", pw)
 // {"msg":"signup","user":{"id":7,"plan":"pro"},"password":"REDACTED"}`,
+    },
+    {
+      type: 'figure',
+      diagram: 'slog-pipeline',
+      caption:
+        'A log call becomes a record that passes through handlers on its way out. A small `ContextHandler` copies the request ID from `ctx` into every record logged with a `…Context` call, which replaces MDC, and a type with a `LogValue` method decides what is printed when a value of that type is logged.',
+      alt: 'Two panels. First: slog.InfoContext(ctx, …) passes through ContextHandler, which adds request_id from ctx, then JSONHandler, which formats it, producing a JSON line with level, msg, amount and request_id. Second: slog.Info("signup", …, "password", pw) calls Password.LogValue(), so the output shows the password as REDACTED.',
     },
     { type: 'heading', text: 'Metrics, tracing and profiling' },
     {

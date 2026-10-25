@@ -175,6 +175,13 @@ pm.ID        // promoted: pm.BaseMessage.ID`,
       text: '**Go 1.27** lets struct literals use promoted fields directly: `PriorityMessage{ID: 1, Topic: "alerts", Priority: 10}`. Earlier versions require spelling out the embedded struct as above, which you will see in most existing code.',
     },
     {
+      type: 'figure',
+      diagram: 'embedding',
+      caption:
+        'Inheritance makes a subtype; embedding does not. The embedded struct sits inside the outer one and its fields and methods are promoted, so `pm.ID` and `pm.LogLine()` work, but a `PriorityMessage` cannot be passed where a `BaseMessage` is expected.',
+      alt: 'Two panels. Java: a PriorityMessage class box below a BaseMessage class box, joined by a hollow-headed is-a arrow. Go: a PriorityMessage box that contains a BaseMessage box (ID, Topic, LogLine) plus a Priority field; dashed arrows promote ID and LogLine out as pm.ID and pm.LogLine().',
+    },
+    {
       type: 'callout',
       title: 'The trap for Java developers: no virtual dispatch through embedding',
       tone: 'warn',

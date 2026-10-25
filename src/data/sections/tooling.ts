@@ -93,6 +93,13 @@ ENTRYPOINT ["/api"]`,
       noteType: 'java',
       text: 'The runtime image holds your binary plus CA certificates and time zone data, typically 10–30 MB in total, compared with a couple of hundred megabytes for a JRE image. There is no Jib or buildpack equivalent to learn: a two-stage Dockerfile is the standard.',
     },
+    {
+      type: 'figure',
+      diagram: 'multi-stage-build',
+      caption:
+        'The build stage has the compiler and module cache; the runtime stage gets only the binary, plus CA certificates and time zone data. That is why a Go service image is typically 10–30 MB where a JRE image is a couple of hundred.',
+      alt: 'Two panels. First: in the build stage, golang:1.27 compiles source into /out/api; COPY --from=build copies that binary to /api in a distroless runtime stage that also has CA certificates and time zones. Second: the Go image is /api on a distroless base, typically 10 to 30 MB; the Java image is app jars on a JRE on an OS base, a couple of hundred MB. The layers are drawn, not to scale.',
+    },
     { type: 'heading', text: 'Embedding files in the binary' },
     {
       type: 'compare',

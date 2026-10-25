@@ -1,12 +1,11 @@
 @import 'tailwindcss';
 
-/* Sidebar collapse state lives on <html data-sidebar="collapsed"> so it is
-   applied before first paint (see the inline script in layout.tsx). */
-@custom-variant sidebar-collapsed (&:where([data-sidebar='collapsed'] .app-sidebar, [data-sidebar='collapsed'] .app-sidebar *));
+/* Colour tokens are not defined here. src/lib/themes.ts is their single source
+   of truth; the root layout inlines them as CSS custom properties per theme
+   (<html data-theme="paper|lamp|night|chalk">, or the system scheme when no
+   theme is stored). Everything below refers to them by name. */
 
 :root {
-  color-scheme: dark;
-
   /* Motion */
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
@@ -14,57 +13,26 @@
   --duration-exit: 200ms;
 
   /* Layout */
-  --sidebar-width: 18rem;
-  --sidebar-collapsed-width: 4.5rem;
-  --mobile-header-height: 3.75rem;
+  --header-height: 3.5rem;
+  --reading-width: 40rem;
+  --margin-width: 13.5rem;
+  --margin-gap: 3rem;
+  /* Space above each reading-column block. Margin notes use it too, so a note
+     lines up with the top of the block it sits beside. */
+  --block-gap: 1.5rem;
 
-  /* Backgrounds */
-  --bg-base: #080812;
-  --bg-surface: #0d0d18;
-  --bg-elevated: #13131f;
-  --bg-panel: #0a0a16;
-  --bg-hover: #11111d;
-
-  /* Borders */
-  --border-dim: #16162a;
-  --border-subtle: #2a2a3a;
-  --border-panel: #24243a;
-
-  /* Text */
-  --text-primary: #e2e2f0;
-  --text-copy: #a4a4bf;
-  --text-secondary: #8b8ba7;
-  --text-muted: #7a7aa0;
-  --text-dim: #3a3a5c;
-
-  /* Accents: amber = Java, cyan = Go, blue = neutral UI */
-  --accent-blue: #4a7aff;
-  --accent-link: #7c9fff;
-  --accent-cyan: #4ec9b0;
-  --accent-java: #c9b85a;
-
-  /* Syntax */
-  --syn-keyword: #7c9fff;
-
-  /* Note boxes */
-  --note-info-bg: #0d1f2d;
-  --note-info-border: #1e4a6a;
-  --note-info-text: #7eb8d4;
-  --note-java-bg: #1a1a0d;
-  --note-java-border: #4a4a1e;
-  --note-java-text: #c9b85a;
-  --note-warn-bg: #1f0d0d;
-  --note-warn-border: #6a1e1e;
-  --note-warn-text: #d47e7e;
-  --note-tip-bg: #0d1f0d;
-  --note-tip-border: #1e4a1e;
-  --note-tip-text: #7ed47e;
-  --note-engine-bg: #1a0d1f;
-  --note-engine-border: #4a1e6a;
-  --note-engine-text: #c07ed4;
-  --note-why-bg: #0d1a1a;
-  --note-why-border: #1e4a4a;
-  --note-why-text: #7ed4c0;
+  /* Shiki's css-variables theme, mapped onto the active theme's syntax tokens */
+  --shiki-foreground: var(--ink);
+  --shiki-background: transparent;
+  --shiki-token-keyword: var(--syn-keyword);
+  --shiki-token-string: var(--syn-string);
+  --shiki-token-string-expression: var(--syn-string);
+  --shiki-token-constant: var(--syn-constant);
+  --shiki-token-function: var(--syn-function);
+  --shiki-token-comment: var(--syn-comment);
+  --shiki-token-parameter: var(--ink);
+  --shiki-token-punctuation: var(--syn-punctuation);
+  --shiki-token-link: var(--syn-function);
 }
 
 @theme inline {
@@ -73,29 +41,26 @@
   --color-current: currentColor;
   --color-black: #000;
 
-  --color-canvas: var(--bg-base);
-  --color-surface: var(--bg-surface);
-  --color-elevated: var(--bg-elevated);
-  --color-panel: var(--bg-panel);
-  --color-hover: var(--bg-hover);
+  --color-paper: var(--paper);
+  --color-sunk: var(--sunk);
+  --color-chip: var(--chip);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
 
-  --color-line-dim: var(--border-dim);
-  --color-line: var(--border-subtle);
-  --color-line-panel: var(--border-panel);
+  --color-ink: var(--ink);
+  --color-copy: var(--copy);
+  --color-ink-2: var(--ink2);
+  --color-ink-3: var(--ink3);
+  --color-faint: var(--faint);
 
-  --color-primary: var(--text-primary);
-  --color-copy: var(--text-copy);
-  --color-secondary: var(--text-secondary);
-  --color-muted: var(--text-muted);
-  --color-dim: var(--text-dim);
+  --color-java: var(--java);
+  --color-go: var(--go);
+  --color-warn: var(--warn);
 
-  --color-accent: var(--accent-blue);
-  --color-link: var(--accent-link);
-  --color-go: var(--accent-cyan);
-  --color-java: var(--accent-java);
-
-  --font-sans: 'Barlow', 'Segoe UI', system-ui, sans-serif;
-  --font-mono: 'Fira Code', 'JetBrains Mono', 'Cascadia Code', ui-monospace, monospace;
+  /* Archivo for headings, labels and UI; Piazzolla for reading; Martian Mono for code */
+  --font-sans: 'Archivo Variable', 'Archivo', system-ui, sans-serif;
+  --font-serif: 'Piazzolla Variable', 'Piazzolla', Georgia, serif;
+  --font-mono: 'Martian Mono Variable', 'Martian Mono', ui-monospace, monospace;
 
   --ease-out-quart: var(--ease-out-quart);
   --ease-out-quint: var(--ease-out-quint);
@@ -103,39 +68,37 @@
 
 @theme {
   /* Type scale */
-  --text-caption: 0.875rem;
-  --text-label: 0.9375rem;
-  --text-body: 1.0625rem;
-  --text-body-lg: 1.1875rem;
-  --text-subheading: 1.25rem;
-  --text-heading: 1.625rem;
-  --text-display: clamp(2.25rem, 5vw, 3.5rem);
+  --text-micro: 0.75rem;
+  --text-caption: 0.8125rem;
+  --text-label: 0.875rem;
+  --text-note: 0.9375rem;
+  --text-body: 1.125rem;
+  --text-body-lg: 1.25rem;
+  --text-subheading: 1.1875rem;
+  --text-heading: 1.5rem;
+  --text-title: clamp(2.25rem, 5.5vw, 3.5rem);
+  --text-display: clamp(2.75rem, 7vw, 4.75rem);
 
-  --container-measure: 68ch;
+  --container-measure: 40rem;
 
-  --breakpoint-3xl: 100rem;
+  /* The width at which the margin column appears (see .folio below). */
+  --breakpoint-folio: 66rem;
 }
 
 @layer base {
   html {
-    background-color: var(--bg-base);
-    color: var(--text-primary);
-    font-family: var(--font-sans);
-    font-size: 16px;
+    background-color: var(--paper);
+    color: var(--copy);
+    font-family: var(--font-serif);
     font-kerning: normal;
+    font-optical-sizing: auto;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
-    scrollbar-color: var(--border-subtle) transparent;
-    scroll-padding-top: calc(var(--mobile-header-height) + 1rem);
-  }
-
-  @media (min-width: 64rem) {
-    html {
-      scroll-padding-top: 2rem;
-    }
+    scrollbar-color: var(--rule-strong) transparent;
+    scroll-padding-top: calc(var(--header-height) + 1.25rem);
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -149,12 +112,12 @@
   }
 
   ::selection {
-    background: color-mix(in srgb, var(--accent-cyan) 32%, transparent);
-    color: var(--text-primary);
+    background: color-mix(in srgb, var(--go) 30%, transparent);
+    color: var(--ink);
   }
 
   :focus-visible {
-    outline: 2px solid var(--accent-cyan);
+    outline: 2px solid var(--go);
     outline-offset: 2px;
   }
 
@@ -168,36 +131,206 @@
   li {
     text-wrap: pretty;
   }
+
+  /* Martian Mono is wide; a slightly condensed cut keeps code lines short.
+     Ligatures stay off: readers need to see the characters they will type. */
+  code,
+  kbd,
+  pre,
+  samp {
+    font-stretch: 87.5%;
+    font-variant-ligatures: none;
+    font-feature-settings:
+      'liga' 0,
+      'calt' 0;
+  }
 }
 
 /* ─── Code blocks (Shiki output) ────────────────────────────────────────── */
 
 .shiki {
   margin: 0;
-  padding: 0.875rem 1.125rem;
-  overflow-x: auto;
+  padding: 0.95rem 1.125rem 1rem;
   font-family: var(--font-mono);
-  font-size: var(--code-font-size, 0.875rem);
-  line-height: 1.75;
+  font-size: 0.8125rem;
+  line-height: 1.8;
   tab-size: 4;
-  /* Ligatures turn `!=` into ≠ and `<-` into an arrow. In a guide that
-     teaches syntax, readers need to see the characters they will type. */
-  font-variant-ligatures: none;
-  font-feature-settings:
-    'liga' 0,
-    'calt' 0;
+  color: var(--ink);
   background: transparent !important;
-  scrollbar-width: thin;
 }
 
+/* Code never scrolls sideways. Blocks are laid out so that lines fit at full
+   width (src/lib/code-layout.ts); on a narrower screen a long line wraps, and
+   the continuation hangs two columns in from the line's own indentation
+   (--indent is set per line by src/lib/highlight.ts). */
 .shiki code {
   display: block;
-  width: max-content;
-  min-width: 100%;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
   background: transparent !important;
 }
 
-/* ─── Dialogs (mobile drawer + search) ──────────────────────────────────── */
+/* Inline blocks, not blocks: with the newlines Shiki keeps between them, text
+   selected and copied by hand keeps its line breaks and blank lines. */
+.shiki .line {
+  display: inline-block;
+  width: 100%;
+  min-height: 1lh;
+  vertical-align: top;
+  padding-left: calc(var(--indent, 0ch) + 2ch);
+  text-indent: calc(-1 * (var(--indent, 0ch) + 2ch));
+}
+
+/* ─── Section page grid ─────────────────────────────────────────────────── */
+/* Every content block is a direct child of .folio. Reading-column blocks sit
+   in column 1; margin notes in column 2, on the same row as the block before
+   them (grid auto-placement keeps them there); full-width blocks span both. */
+
+.folio {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+
+.folio > * {
+  grid-column: 1;
+  min-width: 0;
+}
+
+.folio > :not(.span-full) {
+  max-width: var(--reading-width);
+}
+
+.folio > .span-full {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 66rem) {
+  .folio {
+    grid-template-columns: minmax(0, var(--reading-width)) var(--margin-width);
+    column-gap: var(--margin-gap);
+  }
+
+  .folio > .in-margin {
+    grid-column: 2;
+  }
+}
+
+/* ─── Diagrams ──────────────────────────────────────────────────────────── */
+
+.dg text {
+  font-family: var(--font-mono);
+  font-stretch: 87.5%;
+  font-size: 13px;
+  fill: var(--ink);
+}
+
+.dg .t-sm {
+  font-size: 11.5px;
+  fill: var(--ink3);
+}
+.dg .t-note {
+  font-family: var(--font-serif);
+  font-stretch: 100%;
+  font-style: italic;
+  font-size: 13.5px;
+  fill: var(--ink2);
+}
+.dg .t-label {
+  font-family: var(--font-sans);
+  font-stretch: 112.5%;
+  font-weight: 700;
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+  fill: var(--ink3);
+}
+.dg .t-java {
+  fill: var(--java);
+}
+.dg .t-go {
+  fill: var(--go);
+}
+.dg .t-warn {
+  fill: var(--warn);
+}
+.dg .t-num {
+  fill: var(--syn-constant);
+}
+.dg .t-kw {
+  fill: var(--syn-keyword);
+}
+.dg .t-ink2 {
+  fill: var(--ink2);
+}
+
+.dg .s-ink {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.4;
+}
+.dg .s-muted {
+  fill: none;
+  stroke: var(--ink3);
+  stroke-width: 1.2;
+}
+.dg .s-java {
+  fill: none;
+  stroke: var(--java);
+  stroke-width: 1.6;
+}
+.dg .s-go {
+  fill: none;
+  stroke: var(--go);
+  stroke-width: 1.6;
+}
+.dg .s-warn {
+  fill: none;
+  stroke: var(--warn);
+  stroke-width: 1.6;
+}
+.dg .s-rule {
+  fill: none;
+  stroke: var(--rule-strong);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+}
+.dg .f-box {
+  fill: var(--sunk);
+}
+.dg .f-chip {
+  fill: var(--chip);
+}
+.dg .f-java {
+  fill: color-mix(in srgb, var(--java) 16%, var(--sunk));
+}
+.dg .f-go {
+  fill: color-mix(in srgb, var(--go) 16%, var(--sunk));
+}
+.dg .f-warn {
+  fill: color-mix(in srgb, var(--warn) 14%, var(--sunk));
+}
+.dg .f-ink {
+  fill: var(--ink);
+}
+.dg .f-java-solid {
+  fill: var(--java);
+}
+.dg .f-go-solid {
+  fill: var(--go);
+}
+.dg .f-warn-solid {
+  fill: var(--warn);
+}
+.dg .f-muted {
+  fill: var(--ink3);
+}
+
+/* Chalkboard: the drawing's lines get a little chalk grain. Shapes only, never text. */
+:root[data-theme='chalk'] .dg .shapes {
+  filter: url(#chalk-grain);
+}
+
+/* ─── Dialogs and popovers ──────────────────────────────────────────────── */
 
 dialog.drawer,
 dialog.palette {
@@ -211,7 +344,7 @@ dialog.palette {
 
 dialog.drawer::backdrop,
 dialog.palette::backdrop {
-  background: rgb(0 0 0 / 0.6);
+  background: rgb(0 0 0 / 0.5);
   opacity: 0;
   transition:
     opacity var(--duration-exit) var(--ease-out-quart),
@@ -234,7 +367,7 @@ dialog.palette[open]::backdrop {
 
 dialog.drawer {
   inset: 0 auto 0 0;
-  width: min(20rem, 88vw);
+  width: min(24rem, 90vw);
   height: 100dvh;
   margin: 0;
   transform: translateX(-1.5rem);
@@ -288,15 +421,49 @@ html:has(dialog[open]) {
   overflow: hidden;
 }
 
-/* ─── Sidebar width ─────────────────────────────────────────────────────── */
-
-/* Collapsing is a layout change, so it is instant rather than animated. */
-.app-sidebar {
-  width: var(--sidebar-width);
+/* Menus opened from the running header (theme picker, "on this page"). */
+.menu[popover] {
+  margin: 0;
+  inset: auto;
+  position: fixed;
+  top: calc(var(--header-height) - 0.25rem);
+  border: 1px solid var(--rule-strong);
+  border-radius: 0.5rem;
+  background: var(--sunk);
+  color: var(--copy);
+  padding: 0.375rem;
+  box-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.45);
+  opacity: 0;
+  transform: translateY(-0.25rem);
+  transition:
+    opacity var(--duration-exit) var(--ease-out-quart),
+    transform var(--duration-exit) var(--ease-out-quint),
+    overlay var(--duration-exit) allow-discrete,
+    display var(--duration-exit) allow-discrete;
 }
 
-[data-sidebar='collapsed'] .app-sidebar {
-  width: var(--sidebar-collapsed-width);
+.menu[popover]:popover-open {
+  opacity: 1;
+  transform: none;
+  transition-duration: var(--duration-enter);
+}
+
+@starting-style {
+  .menu[popover]:popover-open {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+  }
+}
+
+/* A theme change cross-fades rather than snapping. */
+html.theme-changing,
+html.theme-changing * {
+  transition:
+    background-color 260ms var(--ease-out-quart),
+    color 260ms var(--ease-out-quart),
+    border-color 260ms var(--ease-out-quart),
+    fill 260ms var(--ease-out-quart),
+    stroke 260ms var(--ease-out-quart) !important;
 }
 
 @media (prefers-reduced-motion: reduce) {

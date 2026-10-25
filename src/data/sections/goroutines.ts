@@ -44,6 +44,13 @@ const section: SectionContent = {
       tone: 'java',
       text: 'Java 21’s virtual threads bring the same idea to the JVM: cheap threads, blocking code, a scheduler underneath. The differences are ecosystem-wide rather than per-thread. In Go every library has always been written for this model, so there is no `synchronized` pinning to audit (Java 24 fixed most pinning), no thread-local habits to unlearn, and no reactive stack to choose instead. Cancellation through `context.Context` is also universal, where Java’s interruption is best-effort.',
     },
+    {
+      type: 'figure',
+      diagram: 'scheduling-models',
+      caption:
+        'A platform thread is an OS thread. Virtual threads and goroutines are both M:N: many cheap threads share a few OS threads, and the scheduler parks whichever ones are waiting so the threads keep running work.',
+      alt: 'Three panels. Java platform threads: three threads, each with an arrow to its own OS thread. Java virtual threads: fourteen small dots, two of them running on the two carrier threads and most of the rest parked. Go goroutines: the same picture, fourteen goroutines with two running on OS threads and most of the rest parked.',
+    },
     { type: 'heading', text: 'Starting a goroutine' },
     {
       type: 'compare',
@@ -77,7 +84,7 @@ go func() {
       type: 'callout',
       title: 'Parked, not blocked',
       tone: 'info',
-      text: 'The runtime keeps `GOMAXPROCS` goroutines executing Go code at once. By default that is the number of CPU cores, and since **Go 1.25** it also respects a container’s CPU limit (for example a Kubernetes CPU limit), so Go services no longer need a library to set it.\n\nWhen a goroutine waits on a network read, a channel, a lock or a timer, the runtime parks it and runs another goroutine on that thread. Network I/O goes through the runtime’s poller (epoll/kqueue), so thousands of waiting connections cost memory, not threads. Blocking system calls such as file I/O do occupy a thread; the runtime simply starts another one to keep the other goroutines running.',
+      text: 'The runtime lets up to `GOMAXPROCS` goroutines execute Go code at once. By default that is the number of CPU cores, and since **Go 1.25** it also respects a container’s CPU limit (for example a Kubernetes CPU limit), so Go services no longer need a library to set it.\n\nWhen a goroutine waits on a network read, a channel, a lock or a timer, the runtime parks it and runs another goroutine on that thread. Network I/O goes through the runtime’s poller (epoll/kqueue), so thousands of waiting connections cost memory, not threads. Blocking system calls such as file I/O do occupy a thread; the runtime simply starts another one to keep the other goroutines running.',
     },
     { type: 'heading', text: 'Closures and loop variables' },
     {

@@ -102,6 +102,13 @@ void add(String name, int a, int b, int expected) {
       type: 'why',
       text: 'The test table is ordinary data, so adding a case is one line, and `t.Run` gives each case its own name in the output and on the command line. The whole pattern is plain Go: no annotations, no argument providers, nothing to learn beyond the language.',
     },
+    {
+      type: 'figure',
+      diagram: 'table-tests',
+      caption:
+        'A table-driven test is a slice of cases and a loop. Each row becomes a subtest named after its case, so failures point at the exact case, and `-run` can select one case by name; the others are not run at all.',
+      alt: "Two panels. First: a table with rows positive (1, 2, 3), zeros (0, 0, 0) and negative (-1, 1, 0), each with an arrow to its own t.Run subtest. Second: go test -run 'TestAdd/zeros' runs only TestAdd/zeros; TestAdd/positive and TestAdd/negative are not run.",
+    },
     { type: 'heading', text: 'Fakes instead of mocks' },
     {
       type: 'compare',

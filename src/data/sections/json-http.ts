@@ -191,6 +191,13 @@ handler := withRecovery(withTiming(withAuth(mux)))`,
       type: 'why',
       text: 'Middleware is just a function from `http.Handler` to `http.Handler`. There is no registration, ordering annotation or filter chain object: the order is the nesting you can see. The same shape works with every router built on `net/http`.',
     },
+    {
+      type: 'figure',
+      diagram: 'request-path',
+      caption:
+        "A request passes through each middleware in the order they are nested, then `ServeMux` matches the method and path pattern and calls the handler. The handler's `switch` plays the role of `@ControllerAdvice`, turning domain errors into status codes.",
+      alt: 'Two panels. First: GET /api/messages/42 passes down through withRecovery, withTiming and withAuth to the ServeMux pattern GET /api/messages/{id}; each wrapper also runs after the handler returns, and h.Get reads the id 42 with r.PathValue. Second: h.messages.Find returns an error and a switch maps it: nil to 200, ErrNotFound to 404, DeadlineExceeded to 504, anything else to 500.',
+    },
     { type: 'heading', text: 'Server timeouts' },
     {
       type: 'codeblock',

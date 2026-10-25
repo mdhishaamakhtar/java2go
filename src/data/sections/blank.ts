@@ -58,13 +58,20 @@ var (
 //   (missing method Delete)`,
     },
     {
+      type: 'figure',
+      diagram: 'blank-identifier',
+      caption:
+        'The blank identifier accepts a value and throws it away, which is how you tell the compiler a discard is deliberate. Declaring it with an interface type, as in `var _ MessageStore = (*PostgresStore)(nil)`, makes the compiler check that `*PostgresStore` still satisfies `MessageStore`.',
+      alt: 'Two panels. First: fmt.Sscan returns two values; the count goes into n and the error goes into a dashed box labelled _, which can never be read. Second: *PostgresStore is checked against MessageStore when the code compiles; with every method present it builds, and with a method missing or changed the build fails.',
+    },
+    {
       type: 'why',
       text: 'Implicit interfaces mean nothing forces a type to keep satisfying an interface. Usually a mismatch is caught wherever the type is used as that interface. But when the only use is in another package, a test, or through dependency wiring, the check documents intent and fails fast next to the implementation. It is the closest Go gets to writing `implements`, and it costs nothing at runtime.',
     },
     {
       type: 'note',
       noteType: 'warn',
-      text: 'A silently ignored error is the most common source of "impossible" bugs in Go code. `result, _ := doSomething()` deserves a comment explaining why the error cannot matter. Linters such as `errcheck` (part of golangci-lint) flag unchecked errors, including ones dropped without `_`.',
+      text: 'A silently ignored error is the most common source of "impossible" bugs in Go code. `result, _ := doSomething()` deserves a comment explaining why the error cannot matter. Linters such as `errcheck` (part of golangci-lint) flag errors dropped silently, such as a bare `f.Close()`; turn on its `check-blank` setting to flag `_` discards too.',
     },
   ],
 };

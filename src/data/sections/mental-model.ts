@@ -51,7 +51,7 @@ const section: SectionContent = {
     { type: 'heading', text: 'How to read this guide' },
     {
       type: 'prose',
-      text: 'Most sections put idiomatic Java on the left and idiomatic Go on the right. Under many comparisons is a **Why Go does this** box explaining the reasoning behind the design choice. Read those carefully: they build the mental model, not just the syntax.\n\nThe guide is written against **Go 1.27** and **Java 25**. When a feature is recent, the version that introduced it is called out, because you will meet older code in real codebases.',
+      text: 'Most sections show the same job in idiomatic Java and in idiomatic Go: side by side when the code is short, Java above Go when it is not. Under many comparisons is a **Why Go does this** box explaining the reasoning behind the design choice. Read those carefully: they build the mental model, not just the syntax.\n\nThe guide is written against **Go 1.27** and **Java 25**. When a feature is recent, the version that introduced it is called out, because you will meet older code in real codebases.',
     },
     {
       type: 'note',
@@ -63,7 +63,7 @@ const section: SectionContent = {
       type: 'callout',
       title: 'Where does behaviour live?',
       tone: 'engine',
-      text: '**Java:** behaviour lives inside the class. A `User` class contains its own methods, and you cannot add methods to a class you do not own.\n\n**Go:** behaviour lives next to the type, not inside it. A method is an ordinary function with a receiver parameter. You can declare methods on any type defined in your package, including types built on primitives like `type Celsius float64`. A struct is just data; the functions that operate on it live nearby but are not enclosed by it.',
+      text: '**Java:** behaviour lives inside the class. A `User` class contains its own methods, and you cannot add methods to a class you do not own.\n\n**Go:** behaviour lives next to the type, not inside it. A method is an ordinary function with a receiver parameter. You can declare methods on any non-interface type defined in your package, including types built on primitives like `type Celsius float64`. A struct is just data; the functions that operate on it live nearby but are not enclosed by it.',
     },
     {
       type: 'compare',
@@ -90,6 +90,13 @@ func (c Celsius) Fahrenheit() float64 {
 
 temp := Celsius(21.5)
 fmt.Println(temp.Fahrenheit()) // 70.7`,
+    },
+    {
+      type: 'figure',
+      diagram: 'where-behaviour-lives',
+      caption:
+        'A Java class encloses its fields and methods. In Go a type is just data, and a method is an ordinary function whose receiver ties it to the type. Any non-interface type defined in your package can have methods, even one built on `float64`.',
+      alt: 'Two panels. Java: one class box named Celsius contains both the field double value and the method toFahrenheit. Go: a box for type Celsius float64 stands alone, and a separate box for func (c Celsius) Fahrenheit() has a dashed arrow, labelled receiver, pointing back to the type.',
     },
   ],
 };

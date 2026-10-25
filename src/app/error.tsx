@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect } from 'react';
+import { pageTitle, primaryAction, secondaryAction } from '@/components/actions';
 
 export default function Error({
   error,
@@ -16,28 +17,19 @@ export default function Error({
 
   return (
     <div className="mx-auto w-full max-w-[46rem] px-5 pt-16 pb-20 sm:px-8 lg:pt-24" role="alert">
-      <h1 className="text-[clamp(2rem,4.2vw,2.875rem)] leading-[1.08] font-bold tracking-[-0.02em] text-primary">
-        Something went wrong
-      </h1>
-      <p className="mt-4 text-body-lg leading-[1.65] text-secondary">
+      <h1 className={pageTitle}>Something went wrong</h1>
+      <p className="mt-5 text-body-lg leading-[1.6] text-ink-2">
         This page failed to render. Trying again usually fixes it; if it keeps happening, please
         report it so it can be fixed.
       </p>
       {error.digest && (
-        <p className="mt-3 font-mono text-caption text-muted">Reference: {error.digest}</p>
+        <p className="mt-3 font-mono text-caption text-ink-3">Reference: {error.digest}</p>
       )}
       <div className="mt-8 flex flex-wrap gap-3">
-        <button
-          type="button"
-          onClick={reset}
-          className="inline-flex h-11 items-center rounded-lg bg-go px-5 text-label font-semibold text-canvas transition-[filter] hover:brightness-110"
-        >
+        <button type="button" onClick={reset} className={primaryAction}>
           Try again
         </button>
-        <Link
-          href="/"
-          className="inline-flex h-11 items-center rounded-lg border border-line px-5 text-label font-medium text-primary transition-colors hover:border-muted/60 hover:bg-surface"
-        >
+        <Link href="/" className={secondaryAction}>
           Back to the contents
         </Link>
       </div>

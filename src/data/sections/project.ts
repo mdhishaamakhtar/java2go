@@ -45,6 +45,13 @@ const section: SectionContent = {
         '**Skip `pkg/`.** The popular "golang-standards/project-layout" repository is not an official standard, and the Go team does not recommend a `pkg/` directory.',
       ],
     },
+    {
+      type: 'figure',
+      diagram: 'service-layout',
+      caption:
+        'Package by domain and the imports all point one way: `main` wires everything, the HTTP and storage packages depend on the domain, and the domain depends on none of them. Packages that mirror Spring layers tend to need each other, and one import back up the chain is a cycle Go refuses to compile.',
+      alt: 'Two panels. By domain: cmd/messaging imports httpapi, postgres and message; httpapi and postgres both import message; message imports nothing. By layer: services imports repositories and repositories imports models; when a model method calls a service, models imports services too, closing a cycle the compiler rejects with import cycle not allowed.',
+    },
     { type: 'heading', text: 'Java tools and their Go counterparts' },
     {
       type: 'table',

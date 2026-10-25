@@ -1,7 +1,10 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import type { ReactNode } from 'react';
 import { ImageResponse } from 'next/og';
 import { siteConfig } from '@/lib/site';
+import { THEMES } from '@/lib/themes';
+import { ARCHIVO_BASELINE, WORDMARK_ARROW } from '@/lib/wordmark';
 
 export const socialImageSize = {
   width: 1200,
@@ -12,33 +15,34 @@ export const socialImageAlt = siteConfig.ogImageAlt;
 
 type FontOptions = NonNullable<ConstructorParameters<typeof ImageResponse>[1]>['fonts'];
 
-const COLORS = {
-  base: '#080812',
-  primary: '#e2e2f0',
-  body: '#c9cada',
-  muted: '#8b8ba7',
-  java: '#c9b85a',
-  go: '#4ec9b0',
-  blue: '#4a7aff',
-} as const;
+/** Social cards always use Night ink, the default dark theme. */
+const COLORS = THEMES.night.tokens;
 
 /**
- * Barlow is read from /public/fonts. If the files are missing the image still
- * renders with the default font instead of failing the build or the request.
+ * Satori cannot read variable or WOFF2 fonts, so /public/fonts holds static
+ * WOFF instances cut from the site's variable fonts with fontTools:
+ *   archivo-expanded-800      Archivo  wdth 125   wght 800
+ *   archivo-semiexpanded-700  Archivo  wdth 112.5 wght 700
+ *   piazzolla-400             Piazzolla opsz 24   wght 400
+ * with the GSUB table removed: Satori's font parser rejects its chaining
+ * substitutions, and these cards need no ligatures or alternates.
+ * If the files are missing the image still renders with the default font.
  */
 async function loadFonts(): Promise<FontOptions> {
   try {
     const dir = join(process.cwd(), 'public', 'fonts');
-    const [regular, bold] = await Promise.all([
-      readFile(join(dir, 'barlow-latin-400-normal.woff')),
-      readFile(join(dir, 'barlow-latin-700-normal.woff')),
+    const [expanded, semiExpanded, serif] = await Promise.all([
+      readFile(join(dir, 'archivo-expanded-800.woff')),
+      readFile(join(dir, 'archivo-semiexpanded-700.woff')),
+      readFile(join(dir, 'piazzolla-400.woff')),
     ]);
     return [
-      { name: 'Barlow', data: regular, style: 'normal', weight: 400 },
-      { name: 'Barlow', data: bold, style: 'normal', weight: 700 },
+      { name: 'Archivo Expanded', data: expanded, style: 'normal', weight: 800 },
+      { name: 'Archivo', data: semiExpanded, style: 'normal', weight: 700 },
+      { name: 'Piazzolla', data: serif, style: 'normal', weight: 400 },
     ];
   } catch (error) {
-    console.warn('[social-image] Barlow fonts unavailable, using the default font:', error);
+    console.warn('[social-image] fonts unavailable, using the default font:', error);
     return undefined;
   }
 }
@@ -48,133 +52,111 @@ function truncate(text: string, max: number): string {
   return `${text.slice(0, max - 1).replace(/\s+\S*$/, '')}…`;
 }
 
-function Logo() {
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 42 }}>
-      <div
-        style={{
-          width: 14,
-          height: 14,
-          borderRadius: 999,
-          background: COLORS.java,
-          boxShadow: `28px 0 0 ${COLORS.go}`,
-        }}
-      />
-      <div
-        style={{
-          fontSize: 20,
-          letterSpacing: '0.14em',
-          textTransform: 'uppercase',
-          fontWeight: 700,
-          color: COLORS.muted,
-        }}
-      >
-        {siteConfig.name}
-      </div>
-    </div>
-  );
-}
-
-interface FooterItem {
-  text: string;
-  color?: string;
-}
-
-/** Satori only applies flex `gap` to direct children, so items render as a flat list. */
-function Footer({ items }: { items: FooterItem[] }) {
-  const tags = items.flatMap((item, i) => [
-    ...(i > 0 ? [{ text: '·', color: COLORS.muted }] : []),
-    item,
-  ]);
-  return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-      <div
-        style={{
-          display: 'flex',
-          gap: 14,
-          fontSize: 18,
-          letterSpacing: '0.08em',
-          textTransform: 'uppercase',
-          fontWeight: 700,
-          color: COLORS.muted,
-        }}
-      >
-        {tags.map((tag, i) => (
-          <span key={i} style={{ color: tag.color ?? COLORS.muted }}>
-            {tag.text}
-          </span>
-        ))}
-      </div>
-      <div
-        style={{
-          fontSize: 18,
-          letterSpacing: '0.08em',
-          textTransform: 'uppercase',
-          fontWeight: 700,
-          color: COLORS.blue,
-        }}
-      >
-        {new URL(siteConfig.url).host}
-      </div>
-    </div>
-  );
-}
-
 const frame = {
   width: '100%',
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
-  padding: '54px 74px',
-  backgroundColor: COLORS.base,
-  color: COLORS.primary,
-  fontFamily: 'Barlow',
+  padding: '60px 76px 54px',
+  backgroundColor: COLORS.paper,
+  color: COLORS.ink,
+  fontFamily: 'Archivo',
 } as const;
 
-/** The site-wide card: JAVA → TO GO. */
+/**
+ * "Java → Go", the running header's wordmark. Every item is one em tall (line
+ * height 1), so the arrow is drawn in a one-em box with the baseline where
+ * Archivo's falls.
+ */
+function Wordmark({ size }: { size: number }) {
+  const { stroke, path, width, before, after } = WORDMARK_ARROW;
+  return (
+    <div
+      style={{
+        display: 'flex',
+        fontFamily: 'Archivo Expanded',
+        lineHeight: 1,
+        fontSize: size,
+        letterSpacing: '-0.01em',
+      }}
+    >
+      <span style={{ color: COLORS.java }}>Java</span>
+      <svg
+        width={(size * width) / 1000}
+        height={size}
+        viewBox={`0 ${-ARCHIVO_BASELINE} ${width} 1000`}
+        fill="none"
+        stroke={COLORS.ink3}
+        strokeWidth={stroke}
+        style={{ marginLeft: (size * before) / 1000, marginRight: (size * after) / 1000 }}
+      >
+        <path d={path} />
+      </svg>
+      <span style={{ color: COLORS.go }}>Go</span>
+    </div>
+  );
+}
+
+/** A hairline, then the wordmark on the left and something on the right. */
+function Footer({ right }: { right: ReactNode }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
+      <div style={{ height: 1, backgroundColor: COLORS.ruleStrong }} />
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          fontSize: 22,
+          lineHeight: 1,
+          color: COLORS.ink3,
+        }}
+      >
+        <Wordmark size={24} />
+        {right}
+      </div>
+    </div>
+  );
+}
+
+/** The site-wide card. */
 export async function createSocialImage() {
   return new ImageResponse(
     <div style={frame}>
-      <Logo />
+      <div style={{ fontSize: 24, color: COLORS.ink3 }}>
+        {`A field guide · Go ${siteConfig.versions.go} · Java ${siteConfig.versions.java}`}
+      </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 20, maxWidth: 640 }}>
-        <div style={{ display: 'flex', gap: 18, alignItems: 'baseline', flexWrap: 'wrap' }}>
-          {(['Java', 'to Go'] as const).map((word, i) => (
-            <div
-              key={word}
-              style={{
-                fontSize: 136,
-                lineHeight: 0.88,
-                fontWeight: 700,
-                letterSpacing: '-0.04em',
-                color: i === 0 ? COLORS.java : COLORS.go,
-                textTransform: 'uppercase',
-              }}
-            >
-              {word}
-            </div>
-          ))}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+        <div
+          style={{
+            display: 'flex',
+            gap: 34,
+            fontFamily: 'Archivo Expanded',
+            fontSize: 150,
+            lineHeight: 0.9,
+            letterSpacing: '-0.04em',
+          }}
+        >
+          <span style={{ color: COLORS.java }}>Java</span>
+          <span>to</span>
+          <span style={{ color: COLORS.go }}>Go</span>
         </div>
         <div
           style={{
-            width: 140,
-            height: 2,
-            background: `linear-gradient(90deg, ${COLORS.java} 0%, ${COLORS.go} 100%)`,
+            fontFamily: 'Piazzolla',
+            fontSize: 34,
+            lineHeight: 1.4,
+            color: COLORS.ink2,
+            maxWidth: 900,
           }}
-        />
-        <div style={{ fontSize: 31, lineHeight: 1.42, color: COLORS.body }}>
-          Side-by-side examples, mental model shifts, and practical service patterns.
+        >
+          Go, taught from the Java you already know: side by side, with the reasoning underneath.
         </div>
       </div>
 
-      <Footer
-        items={[
-          { text: 'Java-first', color: COLORS.java },
-          { text: 'Go-native', color: COLORS.go },
-          { text: 'Reference guide' },
-        ]}
-      />
+      <Footer right={<span>{new URL(siteConfig.url).host}</span>} />
     </div>,
     { ...socialImageSize, fonts: await loadFonts() },
   );
@@ -188,56 +170,43 @@ export async function createSectionImage(input: {
   part: string;
   summary: string;
 }) {
-  const titleSize = input.label.length > 26 ? 76 : input.label.length > 16 ? 92 : 108;
+  const titleSize = input.label.length > 26 ? 72 : input.label.length > 16 ? 88 : 104;
 
   return new ImageResponse(
     <div style={frame}>
-      <Logo />
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 22, maxWidth: 1000 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <div style={{ fontSize: 26, color: COLORS.ink3, paddingTop: 10 }}>{input.part}</div>
         <div
           style={{
-            display: 'flex',
-            gap: 16,
-            fontSize: 24,
-            fontWeight: 700,
-            letterSpacing: '0.1em',
-            textTransform: 'uppercase',
+            fontFamily: 'Archivo Expanded',
+            fontSize: 150,
+            lineHeight: 0.8,
+            letterSpacing: '-0.04em',
+            color: COLORS.faint,
           }}
         >
-          <span style={{ color: COLORS.go }}>{input.number}</span>
-          <span style={{ color: COLORS.muted }}>{input.part}</span>
+          {input.number}
         </div>
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 26, maxWidth: 1000 }}>
         <div
           style={{
+            fontFamily: 'Archivo Expanded',
             fontSize: titleSize,
             lineHeight: 1,
-            fontWeight: 700,
             letterSpacing: '-0.03em',
-            color: COLORS.primary,
+            color: COLORS.ink,
           }}
         >
           {input.label}
         </div>
-        <div
-          style={{
-            width: 140,
-            height: 2,
-            background: `linear-gradient(90deg, ${COLORS.java} 0%, ${COLORS.go} 100%)`,
-          }}
-        />
-        <div style={{ fontSize: 30, lineHeight: 1.4, color: COLORS.body, maxWidth: 940 }}>
+        <div style={{ fontFamily: 'Piazzolla', fontSize: 31, lineHeight: 1.4, color: COLORS.ink2 }}>
           {truncate(input.summary, 150)}
         </div>
       </div>
 
-      <Footer
-        items={[
-          { text: 'Java-first', color: COLORS.java },
-          { text: 'Go-native', color: COLORS.go },
-          { text: `Section ${input.number} of ${input.total}` },
-        ]}
-      />
+      <Footer right={<span>{`Section ${input.number} of ${input.total}`}</span>} />
     </div>,
     { ...socialImageSize, fonts: await loadFonts() },
   );

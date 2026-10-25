@@ -74,6 +74,13 @@ const section: SectionContent = {
     return tx.Commit()
 }`,
     },
+    {
+      type: 'figure',
+      diagram: 'defer-stack',
+      caption:
+        "Each `defer` statement, when it runs, pushes its call onto the function's stack of deferred calls. When the function returns, they run in reverse: `tx.Rollback()` runs before `conn.Close()`.",
+      alt: 'Two drawings of the same stack. First: an arrow labelled defer pushes calls in; conn.Close() at the bottom was registered first and tx.Rollback() on top was registered second. Second: an arrow labelled return pops them out; tx.Rollback() runs first and conn.Close() runs second.',
+    },
     { type: 'heading', text: 'Arguments are evaluated immediately' },
     {
       type: 'codeblock',

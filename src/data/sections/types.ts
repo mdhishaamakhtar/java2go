@@ -33,12 +33,19 @@ var (          // grouped declarations
     },
     {
       type: 'why',
-      text: 'Java leaves object fields `null` until assigned, which is where NullPointerExceptions come from. In Go every type has a zero value that is ready to use: `0`, `""`, `false`, an empty struct, a nil slice you can append to. Only pointers, slices, maps, channels, functions and interfaces can be `nil`, and their types tell you so.',
+      text: 'Java leaves object fields `null` until assigned, which is where NullPointerExceptions come from. In Go every type has a zero value that is ready to use: `0`, `""`, `false`, a struct whose fields are all zero values, a nil slice you can append to. Only pointers, slices, maps, channels, functions and interfaces can be `nil`, and their types tell you so.',
     },
     {
       type: 'note',
       noteType: 'tip',
       text: 'Idiom: use `:=` inside functions, `var x T` when you want the zero value on purpose, and `var` at package level (where `:=` is not allowed). Design your own types so their zero value is useful: `sync.Mutex{}` is an unlocked mutex and `bytes.Buffer{}` is an empty buffer, with no constructor call required.',
+    },
+    {
+      type: 'figure',
+      diagram: 'zero-values',
+      caption:
+        'What a field holds before you assign it. A Java object field starts as `null`. Every Go type has a ready-to-use zero value, and only pointers, slices, maps, channels, functions and interfaces can be `nil`.',
+      alt: 'Two lists. Java fields: int is 0, boolean is false, and String, List of String and User are all null, shown in red. Go: int is 0, bool is false, string is the empty string, a string slice is nil with length 0, a User struct has all fields zero, and *User is nil, shown in red.',
     },
     { type: 'heading', text: 'Integer types: size is explicit' },
     {

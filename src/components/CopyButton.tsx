@@ -51,10 +51,10 @@ export default function CopyButton({ text, label }: { text: string; label: strin
 
   const tone =
     state === 'copied'
-      ? 'text-go border-go/40'
+      ? 'text-go border-go/50'
       : state === 'failed'
-        ? 'text-[var(--note-warn-text)] border-[var(--note-warn-border)]'
-        : 'text-muted border-line hover:border-muted/60 hover:text-primary';
+        ? 'text-warn border-warn/50'
+        : 'text-ink-3 border-rule hover:border-rule-strong hover:text-ink';
 
   return (
     <>
@@ -62,7 +62,7 @@ export default function CopyButton({ text, label }: { text: string; label: strin
         type="button"
         onClick={copy}
         aria-label={`Copy ${label} code`}
-        className={`inline-flex h-8 shrink-0 items-center gap-1.5 rounded-md border px-2.5 text-caption leading-none font-medium transition-colors ${tone}`}
+        className={`inline-flex h-7 shrink-0 items-center gap-1.5 rounded-md border px-2 font-sans text-caption leading-none font-medium transition-colors ${tone}`}
       >
         {state === 'copied' ? (
           <CheckIcon size={14} />

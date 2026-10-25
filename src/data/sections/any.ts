@@ -100,6 +100,13 @@ tags, _ := doc["tags"].([]any)
       text: 'An interface value has two parts: a **type** and a **value**. It is only `nil` when both are nil. Put a nil pointer into an interface and the interface is no longer nil, because it now knows the type. This bites hardest with the `error` interface.',
     },
     {
+      type: 'figure',
+      diagram: 'interface-pair',
+      caption:
+        'An interface value carries a type and a value, and it is `nil` only when both are. Returning a nil `*ValidationError` as an `error` fills in the type, so the result is not `nil` even though nothing failed.',
+      alt: 'Two interface values, each drawn as a type cell and a value cell. Returning nil: type nil, value nil, so err == nil is true. Returning a nil *ValidationError: type *ValidationError, value nil, so err == nil is false.',
+    },
+    {
       type: 'codeblock',
       lang: 'go',
       label: 'a nil pointer inside an interface is not a nil interface',

@@ -55,6 +55,8 @@ func (c *Cache) Snapshot() map[string]Value {
                 return
             }
         }
+        // rows.Next() is also false after an error: real code checks
+        // rows.Err() and reports it (an error channel or an Err method).
     }()
     return out
 }`,
@@ -115,6 +117,13 @@ func Go(ctx context.Context, name string, fn func(context.Context) error) <-chan
     }
     return nil
 }`,
+    },
+    {
+      type: 'figure',
+      diagram: 'exit-paths',
+      caption:
+        'However a function leaves, its deferred calls run. That is why one `defer close(out)` is enough to tell consumers the stream ended, and one deferred closure can add context to every error the function returns.',
+      alt: "Two panels. The goroutine started by stream(): three exits, rows done, scan fails and cancelled, all lead into its deferred calls, which run rows.Close() then close(out), after which the consumer's range over out ends. Transfer(): debit fails, credit fails and success all lead into one deferred function, which runs on every return and wraps err only if it is not nil, so the caller sees a wrapped error or nil.",
     },
     {
       type: 'note',

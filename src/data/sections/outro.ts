@@ -73,6 +73,13 @@ const section: SectionContent = {
       tone: 'engine',
       text: 'Blocking code is the efficient default, and `go` costs almost nothing, so concurrency stops being an architectural decision. The discipline moves elsewhere: every goroutine needs a way to stop (`context`), shared state needs a clear owner (a channel or a mutex), and fan-out needs a limit.',
     },
+    {
+      type: 'figure',
+      diagram: 'three-shifts',
+      caption:
+        'The three shifts this guide keeps returning to, with the sections where each one is worked through.',
+      alt: 'Three panels, each Java above Go. Data and behaviour: a class with data and methods becomes a struct with methods beside it, sections 00, 05 and 06. Errors: throw and catch elsewhere becomes if err != nil return, sections 10 and 12. Concurrency: choosing and sizing an executor becomes go f() plus a context and a limit, sections 14 to 19.',
+    },
     { type: 'heading', text: 'Reading a Go codebase cold' },
     {
       type: 'list',

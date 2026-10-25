@@ -1,3 +1,5 @@
+import type { DiagramId } from '@/lib/diagram-ids';
+
 /** Languages the syntax highlighter is loaded with. */
 export type CodeLang =
   'go' | 'java' | 'bash' | 'xml' | 'json' | 'yaml' | 'sql' | 'dockerfile' | 'properties' | 'text';
@@ -32,6 +34,15 @@ export type Block =
   | { type: 'note'; noteType: NoteType; text: string }
   | { type: 'callout'; title: string; text: string; tone?: Tone }
   | { type: 'why'; text: string }
+  | {
+      type: 'figure';
+      /** Which drawing from the diagram registry. */
+      diagram: DiagramId;
+      /** Shown under the drawing after "Fig. 7.1". Supports inline markup. */
+      caption: string;
+      /** What the drawing shows, in words, for screen readers. */
+      alt: string;
+    }
   | {
       type: 'table';
       rows: string[][];

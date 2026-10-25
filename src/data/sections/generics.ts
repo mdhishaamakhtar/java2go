@@ -83,7 +83,7 @@ static <T extends Number> double sum(List<T> xs) {
       go: `// comparable: supports == and != (can be a map key)
 func Index[T comparable](xs []T, want T) int { ... }
 
-// cmp.Ordered: supports < <= > >= (numbers and strings)
+// cmp.Ordered: supports < <= > >= (integers, floats and strings)
 func Max[T cmp.Ordered](xs []T) T { ... }
 
 // A union constraint lists the allowed types.
@@ -103,6 +103,13 @@ func Sum[T Number](xs []T) T {
     {
       type: 'why',
       text: 'Without the tilde, `Sum` would reject `type Celsius float64` because `Celsius` is not literally `float64`. The `~` admits every type built on the listed ones, which is almost always what you want. Constraints with unions can only be used as constraints, never as ordinary variable types.',
+    },
+    {
+      type: 'figure',
+      diagram: 'type-sets',
+      caption:
+        'A constraint describes a set of types, and each narrower constraint sits inside a wider one. Unions with `~` match on the underlying type, so `type Celsius float64` qualifies wherever `~float64` is listed.',
+      alt: 'Two panels. First: nested sets. any contains []int; inside it comparable contains *User; inside that cmp.Ordered contains string; inside that the Number union contains int and Celsius. Second: the union int | float64 contains int and float64 but not Celsius, while ~int | ~float64 contains int, float64 and Celsius, because Celsius is declared as type Celsius float64.',
     },
     { type: 'heading', text: 'Generic methods (Go 1.27+)' },
     {

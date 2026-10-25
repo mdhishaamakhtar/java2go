@@ -82,6 +82,13 @@ func New(messages messageReader) *Handler {
 // and a test can pass a two-line fake.`,
     },
     {
+      type: 'figure',
+      diagram: 'consumer-interface',
+      caption:
+        'Who owns the interface. A Java class must name each interface it implements, so the interface usually lives with the implementation. In Go the consumer declares the small interface it needs; any type with those methods satisfies it, and the store package never imports handler or knows it exists.',
+      alt: 'Two panels. Java: package store holds both interface MessageStore and class PostgresStore, joined by an implements arrow; package handler depends on MessageStore. Go: package handler declares messageReader, which needs only GetByID; *PostgresStore in package store satisfies it implicitly, shown with a dashed arrow, and store never imports handler.',
+    },
+    {
       type: 'callout',
       title: 'Accept interfaces, return structs',
       tone: 'go',

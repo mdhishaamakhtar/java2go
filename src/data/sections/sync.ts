@@ -116,6 +116,13 @@ func (r *Router) Lookup(topic string) (Handler, bool) {
 }`,
     },
     {
+      type: 'figure',
+      diagram: 'rwmutex-lanes',
+      caption:
+        'Time runs left to right. An `RWMutex` lets readers hold the lock together, but once a writer is waiting, new readers queue behind it, so taking `RLock` again while holding it can deadlock. A plain `Mutex` makes every holder take turns.',
+      alt: "Two timelines with three reader lanes and one writer lane. RWMutex: the three reader bars overlap; the writer waits, dashed, until all readers finish, then runs alone; a reader arriving while the writer waits queues, dashed, and reads after the writer. Mutex: the readers' bars run one after another with dashed waits, and the writer goes last.",
+    },
+    {
       type: 'note',
       noteType: 'engine',
       text: 'An `RWMutex` is not automatically faster: it costs more than a `Mutex` per operation, so it only pays off when reads are frequent and the critical section is not tiny. If data is built once at startup and never changes afterwards, it needs no lock at all. For config that changes rarely, a copy-on-write `atomic.Pointer` (below) makes reads lock-free.',

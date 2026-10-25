@@ -1,4 +1,5 @@
 import type { Block, Part, Section, SectionContent, SectionLink } from '@/types/section';
+import { FOLIO_COLUMNS, longestLine, normalizeCode } from '@/lib/code-layout';
 import { getHeadings } from '@/lib/slug';
 
 import mentalModel from './mental-model';
@@ -158,6 +159,9 @@ export function getReadingMinutes(section: Section): number {
       case 'callout':
         proseWords += count(block.title) + count(block.text);
         break;
+      case 'figure':
+        proseWords += count(block.caption);
+        break;
       default:
         proseWords += count(block.text);
     }
@@ -182,6 +186,8 @@ function textFields(block: Block): string[] {
       return block.items;
     case 'callout':
       return [block.title, block.text];
+    case 'figure':
+      return [block.caption, block.alt];
     default:
       return [block.text];
   }
@@ -201,10 +207,23 @@ function validate(all: Section[]): void {
     if (!section.label.trim()) problems.push(`${where}: empty label`);
     if (!section.summary.trim()) problems.push(`${where}: empty summary`);
     if (section.blocks.length === 0) problems.push(`${where}: has no blocks`);
+    if (!section.blocks.some((block) => block.type === 'figure')) {
+      problems.push(`${where}: every section needs at least one figure`);
+    }
 
     section.blocks.forEach((block, i) => {
       if (textFields(block).some((field) => !field.trim())) {
         problems.push(`${where}, block ${i} (${block.type}): empty text or code`);
+      }
+      if (block.type === 'compare' || block.type === 'codeblock') {
+        const widest = Math.max(
+          ...textFields(block).map((code) => longestLine(normalizeCode(code))),
+        );
+        if (widest > FOLIO_COLUMNS) {
+          problems.push(
+            `${where}, block ${i}: a ${widest}-column line would wrap even at full width (max ${FOLIO_COLUMNS})`,
+          );
+        }
       }
       if (block.type === 'table') {
         const width = block.head?.length ?? block.rows[0]?.length ?? 0;

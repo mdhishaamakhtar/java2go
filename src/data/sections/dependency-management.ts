@@ -94,6 +94,13 @@ require (
       tone: 'go',
       text: 'Maven resolves conflicts with "nearest definition wins", which can silently pick an older version than a library asked for. Go uses **minimal version selection**: for each module, the build uses the highest version that any `require` line in the graph asks for, and never anything newer. The result is deterministic, needs no lock-file solver, and changes only when a `go.mod` file changes.',
     },
+    {
+      type: 'figure',
+      diagram: 'version-selection',
+      caption:
+        "The same dependency graph resolved two ways. Maven's nearest definition picks the C closest to your project, even though D needs a newer one. Go's minimal version selection uses the highest version any `require` line asks for, and never anything newer.",
+      alt: 'Two copies of one dependency graph. app requires A v1.2 and B v1.1. A requires C v1.3, at depth 2. B requires D v1.0, which requires C v1.5, at depth 3. In the Maven panel C v1.3 is highlighted as the version used. In the Go panel C v1.5 is highlighted.',
+    },
     { type: 'heading', text: 'Adding and removing dependencies' },
     {
       type: 'codeblock',

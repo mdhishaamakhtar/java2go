@@ -30,7 +30,7 @@ ctx := context.Background()
 ctx = context.TODO()
 
 // In an HTTP handler: cancelled when the client disconnects
-// or the server shuts down.
+// or when the handler returns.
 func (h *Handler) Get(w http.ResponseWriter, r *http.Request) {
     ctx := r.Context()
     ...
@@ -67,6 +67,13 @@ cancel()`,
       type: 'note',
       noteType: 'warn',
       text: 'Call `cancel` on every path, usually with `defer cancel()` on the very next line. A derived context that is never cancelled stays registered with its parent (and keeps its timer, for timeouts) until the parent itself ends. `go vet` reports a discarded cancel function.',
+    },
+    {
+      type: 'figure',
+      diagram: 'context-tree',
+      caption:
+        "Every derived context has a parent, so a request's contexts form a tree under the root. Cancelling one, here because its timeout fires, closes `Done()` for it and everything derived from it, while its parent and siblings carry on. (`WithoutCancel`, below, is the deliberate exception.)",
+      alt: 'Two copies of a tree. Background() is the root; r.Context() derives from it; WithTimeout and WithCancel derive from r.Context(); another WithCancel derives from WithTimeout. In the second copy the timeout has fired: WithTimeout and the WithCancel below it are marked cancelled, while r.Context(), its other child WithCancel and Background() are not.',
     },
     { type: 'heading', text: 'Timeouts and deadlines' },
     {
@@ -137,7 +144,7 @@ msg, err := svc.Find(ctx, id)
     { type: 'heading', text: 'Work that must outlive the request' },
     {
       type: 'prose',
-      text: 'Sometimes a handler starts work that should finish even if the client disconnects, such as writing an audit record. `context.WithoutCancel` (Go 1.21+) returns a context that keeps the parent’s **values** (trace IDs and so on) but is never cancelled and has **no deadline**. Give that work its own timeout so it cannot run forever.',
+      text: 'Sometimes a handler starts work that should finish even after the response is sent or the client disconnects, such as writing an audit record. `r.Context()` is cancelled as soon as the handler returns, so that work must detach from it. `context.WithoutCancel` (Go 1.21+) returns a context that keeps the parent’s **values** (trace IDs and so on) but is never cancelled and has **no deadline**. Give that work its own timeout so it cannot run forever.',
     },
     {
       type: 'codeblock',
@@ -150,7 +157,7 @@ msg, err := svc.Find(ctx, id)
         return
     }
 
-    // Survives the client hanging up; still carries trace IDs.
+    // Survives the handler returning; still carries trace IDs.
     auditCtx, cancel := context.WithTimeout(context.WithoutCancel(r.Context()), 10*time.Second)
     go func() {
         defer cancel()

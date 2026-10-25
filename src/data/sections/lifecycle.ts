@@ -17,6 +17,13 @@ const section: SectionContent = {
       tone: 'go',
       text: '**1.** Imported packages are initialised first, dependencies before dependents, each package exactly once.\n\n**2.** Within a package, package-level variables are initialised in dependency order, then every `init()` function runs in the order the files are presented to the compiler.\n\n**3.** `main.main()` runs.\n\nIf `main` imports `b` and `b` imports `c`: c’s variables → c’s `init()` → b’s variables → b’s `init()` → main’s variables → main’s `init()` → `main()`.',
     },
+    {
+      type: 'figure',
+      diagram: 'startup-order',
+      caption:
+        "Before `main()` runs, every imported package is initialised exactly once, dependencies first: its variables, then its `init()` functions. After that, a production `run()` owns the service's whole life, from wiring to a graceful shutdown when SIGTERM arrives.",
+      alt: 'Two panels. First: seven steps in order: c variables, c init(), b variables, b init(), main variables, main init(), then main(), with brackets marking packages c, b and main. Second: run() calls signal.NotifyContext, loads config and opens the pool with defer pool.Close(), starts srv.ListenAndServe in a goroutine, waits until SIGTERM cancels ctx, then calls srv.Shutdown(shutdownCtx), which has up to 20 seconds to drain before pool.Close() runs.',
+    },
     { type: 'heading', text: 'init(): automatic, invisible, hard to test' },
     {
       type: 'codeblock',

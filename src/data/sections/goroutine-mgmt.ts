@@ -158,6 +158,13 @@ for r := range results {
       noteType: 'java',
       text: 'A fixed pool of workers reading from a channel is the Go shape of `Executors.newFixedThreadPool(8)`. You need it less often than in Java: when the limit exists only to protect a downstream resource, `errgroup.SetLimit` or a semaphore is simpler than a pool.',
     },
+    {
+      type: 'figure',
+      diagram: 'worker-pool',
+      caption:
+        'A worker pool is a fixed number of goroutines ranging over one channel: whichever worker is free receives the next job. Shutdown is a chain of closes, each stage telling the next one there is nothing more to come.',
+      alt: 'Two panels. First: a feeder sends into a jobs channel, which fans out to worker 1, 2, 3 and 8; all workers send into one results channel. Second: five steps joined by arrows: close(jobs) when the feeder is done; range jobs ends in each worker; wg.Wait() returns when all have exited; close(results); range results ends in the main loop.',
+    },
     { type: 'heading', text: 'Fan-in: merging channels' },
     {
       type: 'codeblock',

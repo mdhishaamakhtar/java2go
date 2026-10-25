@@ -8,7 +8,7 @@ const LINK = /^\[([^\]]+)\]\(([^)\s]+)\)$/;
 
 export function InlineCode({ children }: { children: ReactNode }) {
   return (
-    <code className="rounded-[0.3rem] border border-line bg-elevated px-[0.35em] py-[0.1em] font-mono text-[0.86em] [overflow-wrap:anywhere] text-link [font-variant-ligatures:none]">
+    <code className="rounded-[0.25rem] bg-chip px-[0.35em] py-[0.08em] font-mono text-[0.8em] [overflow-wrap:anywhere] text-ink">
       {children}
     </code>
   );
@@ -16,7 +16,7 @@ export function InlineCode({ children }: { children: ReactNode }) {
 
 function RichLink({ href, children }: { href: string; children: ReactNode }) {
   const className =
-    'font-medium text-link underline decoration-link/40 underline-offset-[0.2em] transition-colors hover:decoration-link';
+    'text-ink underline decoration-go/60 decoration-[0.08em] underline-offset-[0.2em] transition-colors hover:decoration-go';
 
   if (href.startsWith('/') || href.startsWith('#')) {
     return (
@@ -47,7 +47,7 @@ export function RichText({ text }: { text: string }) {
         }
         if (token.length > 4 && token.startsWith('**') && token.endsWith('**')) {
           return (
-            <strong key={i} className="font-semibold text-primary">
+            <strong key={i} className="font-semibold text-ink">
               {/* Bold may contain `code` or links, so parse its contents too */}
               <RichText text={token.slice(2, -2)} />
             </strong>

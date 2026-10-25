@@ -27,9 +27,12 @@ Every concept starts from the Java you know, shows idiomatic Go next to it, and 
 Site features:
 
 - Java and Go examples side by side, syntax-highlighted at build time
+- A drawn diagram in every section, explaining its hardest idea, with a caption and screen-reader description
+- A field-guide layout: asides such as "Coming from Java" sit in the margin beside the text they belong to
+- Four reading themes (Paper, Lamplight, Night ink, Chalkboard) that follow your system setting until you pick one
 - Full-text search across sections, headings and Java vocabulary (<kbd>⌘K</kbd> / <kbd>Ctrl K</kbd> or <kbd>/</kbd>)
-- An "On this page" table of contents with scroll tracking, and linkable headings
-- Keyboard- and screen-reader-friendly navigation, a collapsible sidebar and a mobile drawer
+- A running header with the contents, an "on this page" jump list that tracks your scroll, and linkable headings
+- Keyboard- and screen-reader-friendly throughout, with every theme checked for WCAG contrast by the test suite
 - Static pages with per-section Open Graph images, structured data, a sitemap and robots rules
 
 ## Tech stack
@@ -59,7 +62,8 @@ Open [http://localhost:3000](http://localhost:3000).
 | `bun run dev`      | Start the development server                        |
 | `bun run build`    | Production build (also validates all guide content) |
 | `bun run start`    | Serve the production build                          |
-| `bun run check`    | Type-check, lint and verify formatting              |
+| `bun run test`     | Unit tests (theme contrast, layout rules, diagrams) |
+| `bun run check`    | Type-check, lint, verify formatting and run tests   |
 | `bun run lint:fix` | Fix lint problems where possible                    |
 | `bun run format`   | Format everything with Prettier                     |
 
@@ -68,13 +72,13 @@ Open [http://localhost:3000](http://localhost:3000).
 ```text
 src/
 ├── app/                    routes, metadata, OG images, sitemap, search index
-├── components/             renderer, code blocks, navigation, search
+├── components/             content blocks, diagrams, header and navigation, search
 ├── data/sections/          the guide: one file per section, ordered in index.ts
-├── lib/                    highlighting, slugs, search, site config
+├── lib/                    themes, highlighting, layout rules, slugs, search, site config
 └── types/section.ts        the content block schema
 ```
 
-Content is plain TypeScript data. `next build` validates it and fails with a clear message on empty blocks, malformed tables, duplicate ids, or internal links that point to a missing section or heading.
+Content is plain TypeScript data. `next build` validates it and fails with a clear message on empty blocks, malformed tables, duplicate ids, a section without a figure, or internal links that point to a missing section or heading.
 
 ## Contributing
 

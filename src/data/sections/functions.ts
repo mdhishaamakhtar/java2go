@@ -110,6 +110,13 @@ handler := WithLogging(WithRetry(3, process))`,
       noteType: 'java',
       text: 'Go needs no `Function`, `Supplier`, `Consumer` or `BiFunction` zoo. A function type is written directly: `func(Message) error`, `func() int`, `func(string, int) (bool, error)`. Methods can be used as values too: `srv.Handle` is a function value with `srv` already bound, like `srv::handle`.',
     },
+    {
+      type: 'figure',
+      diagram: 'middleware-onion',
+      caption:
+        'Middleware is functions wrapping functions. Each wrapper takes a `HandlerFunc` and returns a new one, so composing them nests them. A call travels inward through every layer, and the result travels back out through the same layers, each of which can act on it: `WithRetry` can call `process` again, and `WithLogging` logs a failure.',
+      alt: 'Two panels. First: nested boxes, WithLogging around WithRetry(3, …) around process. Second: three stacked boxes, WithLogging, WithRetry and process; arrows labelled next(msg) go down from each to the next, with up to 3 tries from WithRetry to process, and dashed arrows bring err, or nil, back up. WithLogging is marked as running first.',
+    },
     { type: 'heading', text: 'Closures' },
     {
       type: 'codeblock',

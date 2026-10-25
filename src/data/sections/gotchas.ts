@@ -72,6 +72,13 @@ for i := range users {
     users[i].Active = true
 }`,
     },
+    {
+      type: 'figure',
+      diagram: 'range-copy',
+      caption:
+        'The loop variable `u` in a `range` loop is a copy of the element, so setting a field on it changes nothing in the slice. Index into the slice to change the element itself.',
+      alt: 'Two panels. First: for _, u := range users copies the second User into u; u.Active is set to true but all three users still have Active false. Second: for i := range users sets users[i].Active = true; at i = 1 the first two users have Active true, the second is highlighted as the one being set, and the third is still false.',
+    },
     { type: 'subheading', text: 'Sub-slices share memory with the original' },
     {
       type: 'prose',

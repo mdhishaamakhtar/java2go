@@ -88,7 +88,7 @@ func hashPw(pw string) string { ... }`,
     { type: 'heading', text: 'internal/: visibility at the module level' },
     {
       type: 'prose',
-      text: 'Java 9 modules let you control which packages a module exports. Go has a lighter mechanism enforced by the compiler: a package under a directory named `internal` can only be imported by code rooted at the parent of that `internal` directory. Put everything that is not a deliberate public API under `internal/` and outsiders cannot depend on it.',
+      text: 'Java 9 modules let you control which packages a module exports. Go has a lighter mechanism, enforced by the `go` command when it builds: a package under a directory named `internal` can only be imported by code rooted at the parent of that `internal` directory. Put everything that is not a deliberate public API under `internal/` and outsiders cannot depend on it.',
     },
     {
       type: 'codeblock',
@@ -101,6 +101,13 @@ func hashPw(pw string) string { ... }`,
 └── go.mod
 
 github.com/someone/else ← compile error: use of internal package not allowed`,
+    },
+    {
+      type: 'figure',
+      diagram: 'package-visibility',
+      caption:
+        'Two kinds of visibility. Between packages, the first letter of a name decides whether other packages can use it, for fields as well as functions. A package under `internal/` goes further: only code rooted at the parent of that `internal` directory can import it.',
+      alt: 'Two panels. First: package model holds type User struct, whose fields ID and Email are teal and password grey, plus the functions NewUser in teal and hashPw in grey. A caller in package main has a solid arrow to the exported fields and a dashed, crossed-out arrow to password. Second: inside the module github.com/mycompany/app, cmd/api is allowed to import internal/billing; an import of internal/billing from github.com/someone/else is crossed out at the module boundary.',
     },
     { type: 'heading', text: 'Naming conventions' },
     {

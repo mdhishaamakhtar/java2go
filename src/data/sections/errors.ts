@@ -92,7 +92,7 @@ func (svc *Service) Publish(ctx context.Context, id int64) error {
 }
 
 // err.Error() reads like a stack trace written by humans:
-// "publish: query message 42: dial tcp 10.0.0.5:5432: connection refused"`,
+// "publish: query message 42: dial tcp 10.0.0.5:5432: connect: connection refused"`,
     },
     {
       type: 'note',
@@ -131,7 +131,14 @@ if errors.As(err, &verr) {
     },
     {
       type: 'why',
-      text: 'Never compare error strings, and never use `==` on wrapped errors: once a layer adds context with `%w`, only `errors.Is` and `errors.As` can see the original. They walk the whole chain, like Java’s `getCause()` loop, but built in.',
+      text: 'Never compare error strings, and never use `==` on wrapped errors: once a layer adds context with `%w`, only `errors.Is` and `errors.As` can see the original. They walk the whole chain by calling each layer’s `Unwrap()` method, like Java’s `getCause()` loop, but built in.',
+    },
+    {
+      type: 'figure',
+      diagram: 'error-chain',
+      caption:
+        'Wrapping with `%w` nests each error inside the next, so the message reads like a trail of what was happening and the original cause stays inside. `errors.Is` and `errors.As` unwrap layer by layer to find it; `==` only ever sees the outermost error.',
+      alt: 'Two panels. First: nested boxes labelled with their format strings, "publish: %w" wrapping "query message %d: %w" wrapping the cause, connection refused; the message lists every layer, outside in. Second: the same three errors stacked vertically and joined by arrows labelled Unwrap(); a line beside all three is labelled errors.Is and errors.As, and a note says == compares only the outermost error.',
     },
     { type: 'heading', text: 'Multiple errors at once' },
     {

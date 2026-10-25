@@ -82,6 +82,13 @@ c := slices.Clone(a)
 // Or cap the sub-slice so append must reallocate (full slice expression)
 d := a[1:3:3] // len 2, cap 2`,
     },
+    {
+      type: 'figure',
+      diagram: 'slice-header',
+      caption:
+        'A slice is a small header (pointer, length, capacity) over a backing array. Sub-slices share that array, so a write through one is visible through the other. When `append` needs more than the capacity, it copies everything into a new, larger array, which is why you assign its result back to `s`.',
+      alt: 'Three panels. First: the header of make([]int, 3, 5) points at an array of three zeros and two spare cells, with len 3 and cap 5 marked. Second: headers a (len 5, cap 5) and b (len 2, cap 4) point into the same array 1, 99, 3, 4, 5; b covers the second and third cells, so b[0] = 99 changed a[1]. Third: s = append(s, 77) on the full slice 0, 0, 0, 99, 88 copies it into a new, larger array that ends with 77 and has spare room; s now points there.',
+    },
     { type: 'heading', text: 'nil slice vs empty slice' },
     {
       type: 'codeblock',

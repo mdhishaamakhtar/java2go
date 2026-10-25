@@ -57,6 +57,13 @@ len(jobs) // items currently buffered
 cap(jobs) // capacity: 100`,
     },
     {
+      type: 'figure',
+      diagram: 'channel-timing',
+      caption:
+        'Time runs left to right. On an unbuffered channel a send blocks until a receiver takes the value, so the two goroutines meet at the handoff. A buffered channel accepts sends immediately until it is full; only then does the producer wait, which is backpressure.',
+      alt: "Two timelines. Unbuffered: the sender sends, waits (shown dashed and labelled blocked) until the receiver receives, and a handoff arrow joins the two lanes at that moment. Buffered with capacity 3: the producer's first three sends, jobs <- j, fill three buffer slots at once; the fourth send waits until the consumer receives one value, then the producer continues.",
+    },
+    {
       type: 'callout',
       title: 'Which one?',
       tone: 'go',

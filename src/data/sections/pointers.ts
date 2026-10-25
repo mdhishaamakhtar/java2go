@@ -53,6 +53,13 @@ m4 := m3           // copies the pointer: same Message
 m4.Retries = 5     // m3.Retries is now 5`,
     },
     {
+      type: 'figure',
+      diagram: 'value-vs-pointer',
+      caption:
+        'Java variables of object type hold references, so `m2 = m1` shares one object. A Go struct variable holds the struct itself, so `m2 := m1` copies every field. Sharing in Go takes a pointer, written explicitly with `&`.',
+      alt: 'Three panels, each after the copy and then setting the second variable to 5. Java: variables m1 and m2 each hold a reference, and both arrows point to one Message object whose retries field is 5. Go with values: m1 holds a Message with Retries 0, and m2 holds a separate copied Message with Retries 5. Go with pointers: m3 and m4 each hold a pointer, and both point to one Message with Retries 5.',
+    },
+    {
       type: 'why',
       text: 'Go puts sharing in the type. When you see `Message` you know you have your own copy; when you see `*Message` you know someone else may be looking at, or changing, the same data. In Java you have to remember which types are primitives and which are objects to know whether assignment copies.',
     },

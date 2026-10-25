@@ -62,6 +62,13 @@ for n := range Countdown(3) {
       type: 'why',
       text: 'A push iterator is written as an ordinary loop: state lives in local variables instead of fields, and there is no `hasNext`/`next` protocol to keep consistent. Because the iterator controls the loop, it can also run cleanup (closing a file or a database cursor) after the last `yield`, which Java’s `Iterator` cannot do without `AutoCloseable` streams.',
     },
+    {
+      type: 'figure',
+      diagram: 'push-iterator',
+      caption:
+        'Who drives the loop. A Java `for` loop pulls each value by calling `hasNext()` and `next()`. A Go iterator pushes each value by calling `yield`, which runs the loop body; when the body breaks, `yield` returns false and the iterator returns.',
+      alt: 'Two sequence diagrams. Java: the for loop calls hasNext() on the Iterator and gets true, calls next() and gets 3, and repeats until hasNext() is false. Go: the iterator function returned by Countdown(3) calls yield(3) on the loop body, which returns true, then calls yield(2), which returns false because the body breaks when n is 2, so the iterator returns.',
+    },
     { type: 'heading', text: 'Iterators in the standard library' },
     {
       type: 'table',
